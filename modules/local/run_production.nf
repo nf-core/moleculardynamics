@@ -20,7 +20,7 @@ process RUN_PRODUCTION {
     label 'process_high'
     label 'process_long'
       
-    publishDir "${params.outdir}/production", mode: 'copy'
+    publishDir "${params.outdir}/${sample}/production", mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
     
     input:
     tuple val(sample), path(npt_gro), path(topol), path(itps), path(md_mdp)

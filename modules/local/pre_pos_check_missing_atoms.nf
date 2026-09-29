@@ -20,7 +20,7 @@
 process PRE_POS_CHECK_MISSING_ATOMS {
     label 'process_single'
 
-    publishDir "${params.outdir}/preprocessing", mode: 'copy'
+    publishDir "${params.outdir}/${sample}/preprocessing", mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
 
             
         input:

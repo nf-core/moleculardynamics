@@ -18,7 +18,7 @@
 process RUN_ENERGY_MINIMISATION {
     label 'process_medium'
   
-    publishDir "${params.outdir}/energy_minimization", mode: 'copy'
+    publishDir "${params.outdir}/${sample}/energy_minimization", mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
     
     input:
     tuple val(sample), path(gro_box_solvated_ions), path(topol), path(itps), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)

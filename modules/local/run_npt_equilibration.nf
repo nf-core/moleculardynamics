@@ -18,7 +18,7 @@
 process RUN_NPT_EQUILIBRATION {
     label 'process_medium'
   
-    publishDir "${params.outdir}/npt_equilibration", mode: 'copy'
+    publishDir "${params.outdir}/${sample}/npt_equilibration", mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
     
     input:
     tuple val(sample), path(nvt_gro), path(topol), path(itps), path(npt_mdp), path(md_mdp)

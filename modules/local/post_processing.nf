@@ -19,7 +19,7 @@
 process POST_PROCESSING {
     label 'process_low'
   
-    publishDir "${params.outdir}/post_processing", mode: 'copy'
+    publishDir "${params.outdir}/${sample}/post_processing", mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
     
     input:
     tuple val(sample), path(md_tpr), path(md_xtc)
