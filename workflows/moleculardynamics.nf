@@ -65,7 +65,8 @@ workflow MOLECULARDYNAMICS {
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     // STEP 9. Analysis: RMSD calculation
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    ch_rmsd_input = ch_md_gro.join(ch_postprocessed_xtc)   // tuple(sample, gro, noPBC.xtc)
+    // Reference is the production .tpr (starting structure), not the final .gro
+    ch_rmsd_input = ch_md_tpr.join(ch_postprocessed_xtc)   // tuple(sample, tpr, noPBC.xtc)
     ANALYSIS_RMSD(ch_rmsd_input)
     ANALYSIS_RMSD.out.rmsd_xvg.view { "✅ RMSD analysis completed: $it" }
 

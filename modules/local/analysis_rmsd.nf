@@ -13,6 +13,7 @@
 //     Description:
 //     - This process calculates the Root Mean Square Deviation (RMSD) of a molecular dynamics trajectory.
 //     - It uses GROMACS tools to perform the analysis and outputs the RMSD data and plot.
+//     - The reference is the production run .tpr, i.e. the starting structure (first frame) of the trajectory.
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
@@ -22,7 +23,7 @@ process ANALYSIS_RMSD {
     publishDir "${params.outdir}/analysis", mode: 'copy'
     
     input:
-    tuple val(sample), path(md_gro), path(md_noPBC_xtc)
+    tuple val(sample), path(md_tpr), path(md_noPBC_xtc)
     
     output:
     tuple val(sample), path("rmsd.xvg"), emit: rmsd_xvg
@@ -35,8 +36,9 @@ process ANALYSIS_RMSD {
     script:
     """
     echo "Calculating RMSD for the protein along the trajectory"
-    # Select group 3 (usually C-alpha atoms) for RMSD calculation over the protein (group 1)
-    printf "3\n1\n" | ${params.gmx_cmd} rms -s ${md_gro} -f ${md_noPBC_xtc} -o rmsd.xvg -tu ns
+    # Reference: starting structure stored in the production .tpr (first frame of the trajectory)
+    # Least-squares fit and RMSD both computed over group 3 (C-alpha)
+    printf "3\n3\n" | ${params.gmx_cmd} rms -s ${md_tpr} -f ${md_noPBC_xtc} -o rmsd.xvg -tu ns
 
     echo "RMSD analysis completed!"
     """
