@@ -8,6 +8,4 @@ testing*
 *.pyc
 null/
 realcase/
-.github/copilot-instructions.md
-CLAUDE.md
-.vscode/*
+
