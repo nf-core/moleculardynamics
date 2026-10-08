@@ -54,7 +54,7 @@
                 "type": "string",
                 "description": "GROMACS force field name",
                 "enum": ["charmm27", "amber03","amber99sb", "amber99sb-ildn", "oplsaa", "gromos54a7"],
-                "errorMessage": "Force field must be one of the following: charmm27, charmm36, amber, amber99sb"
+                "errorMessage": "Force field must be one of the following: charmm27, amber03, amber99sb, amber99sb-ildn, oplsaa, gromos54a7"
             },
             "box_type": {
                 "type": "string",
