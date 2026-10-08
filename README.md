@@ -5,8 +5,6 @@
   </picture>
 </h1>
 
-👩‍💻 I'm working on it, so please be patient.
-
 [![GitHub Actions CI Status](https://github.com/nf-core/moleculardynamics/actions/workflows/nf-test.yml/badge.svg)](https://github.com/nf-core/moleculardynamics/actions/workflows/nf-test.yml)
 [![GitHub Actions Linting Status](https://github.com/nf-core/moleculardynamics/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/moleculardynamics/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/moleculardynamics/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
@@ -22,19 +20,14 @@
 
 # Introduction
 
-**nf-core/moleculardynamics** is a bioinformatics pipeline for running molecular dynamic simulations (MD) using GROMACS open-source software. This workflow enables researchers to perform standard protein simulations in a fully automated manner, with minimal configuration, on both local and high-performance computing (HPC) environments.
+**nf-core/moleculardynamics** is a bioinformatics pipeline for running molecular dynamic simulations (MD) using [GROMACS](https://www.gromacs.org/). This workflow enables researchers to perform standard protein simulations in a fully automated manner, with minimal configuration, on both local and high-performance computing (HPC) environments.
+
+It takes a protein structure (PDB) and GROMACS parameter files (MDP) for each sample, prepares the system (topology, solvation, ions), runs energy minimisation, NVT/NPT equilibration and a production simulation, and returns the trajectory together with a first structural analysis (RMSD).
 
 We are currently working on the following tasks:
 
 1.  🚀📆 Official release of the `nf-core/moleculardynamics` pipeline.
 2.  🛠👩‍💻 Expanding the pipeline’s capabilities to include more analysis modules (e.g., RMSF, distances), and integrating specialized tools for membrane proteins and protein-ligand complexes.
-3.  📚📝 Generating a comprehensive test dataset.
-
-<!-- TODO nf-core:
-   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
-   major pipeline sections and the types of output it produces. You're giving an overview to someone new
-   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
--->
 
 # Pipeline
 
@@ -47,48 +40,31 @@ We are currently working on the following tasks:
 
 The `nf-core/moleculardynamics` pipeline automates a standard GROMACS MD simulation workflow. The major steps are:
 
-- **Input pre-processing:** From the PDB structure, remove the missing atoms.
-- **Production run:** Main subworkflow of the pipeline.
+- **Input pre-processing:** Remove heteroatoms (ligands, ions, waters) from the PDB structure and check that no atoms are missing.
+- **MD simulation:** Main subworkflow of the pipeline.
   - **Generation of molecular topology**,
   - **System solvation**, and ion addition to neutralize the system.
   - **Energy Minimization:** Removal of steric clashes and relaxation of the initial structure.
   - **Equilibration:** NVT (constant Number, Volume, Temperature) and NPT (constant Number, Pressure, Temperature) equilibration to bring the system to the desired temperature and density.
   - **Production MD:** Execution of the main molecular dynamics simulation.
-- **Post-processing:** Centering the protein and remove periodic boundary condition (PBC).
-- **Analysis:** Preliminary analysis of the Root-Mean-Square Deviation (RMSD).
+- **Post-processing:** Centre the protein and remove periodic boundary condition (PBC) artifacts from the trajectory.
+- **Analysis:** Calculation of the Root-Mean-Square Deviation (RMSD) relative to the starting structure.
 
 # Usage
 
-[👩‍💻 working on it]
-
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
-
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
 
 First, prepare a samplesheet with your input data that looks as follows:
 
 `samplesheet.csv`:
 
 ```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+sample,structure,em_mdp,nvt_mdp,npt_mdp,md_mdp,forcefield,box_type,distance_to_box
+LYSOZYME,/data/1AKI.pdb,/data/em.mdp,/data/nvt.mdp,/data/npt.mdp,/data/md.mdp,charmm27,cubic,1.0
 ```
 
-Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
-
--->
-
-<!-- First, prepare a samplesheet with your input PDB files that looks as follows:
-
-`samplesheet.csv`:
-
-```csv
-sample,pdb_file
-my_protein_A,path/to/my_protein_A.pdb
-my_protein_B,path/to/my_protein_B.pdb
-```
+Each row represents one protein system to simulate, with its structure, the MDP files for each simulation step, and the force field and box settings.
 
 Now, you can run the pipeline using:
 
@@ -97,7 +73,7 @@ nextflow run nf-core/moleculardynamics \
    -profile <docker/singularity/.../institute> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
-``` -->
+```
 
 > [!WARNING]
 > Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
@@ -106,7 +82,7 @@ For more details and further functionality, please refer to the [usage documenta
 
 # Pipeline output
 
-[👩‍💻 working on it]
+Results are organised per sample (`<outdir>/<sample>/<step>/`) and include the prepared system, the equilibration and production trajectories, a PBC-corrected trajectory and the RMSD analysis.
 
 To see the results of an example test run with a full size dataset refer to the [results](https://nf-co.re/moleculardynamics/results) tab on the nf-core website pipeline page.
 For more details about the output files and reports, please refer to the
@@ -117,8 +93,6 @@ For more details about the output files and reports, please refer to the
 nf-core/moleculardynamics has been developed by Sara Tolosa Alarcón ([@sarata00](https://github.com/sarata00)) from the [Computational Biology Group](https://www.bsc.es/discover-bsc/organisation/scientific-structure/computational-biology) at the [Barcelona Supercomputing Center](https://www.bsc.es/) under the [deCYPher project](https://www.decypher.bio/) and supervision of Miguel Romero-Durana ([@migromero](https://github.com/migromero)).
 
 # Contributions and Support
-
-[👩‍💻 working on it]
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
 
