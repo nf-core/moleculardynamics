@@ -6,8 +6,6 @@
 
 ## Introduction
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
-
 ## Samplesheet input
 
 You will need to create a samplesheet with information about the molecular dynamics simulations you would like to set up and run before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with the required columns and a header row as shown in the examples below.
@@ -18,29 +16,38 @@ You will need to create a samplesheet with information about the molecular dynam
 
 ### Samplesheet format
 
-The samplesheet defines molecular systems and their simulation parameters. Each row represents one molecular system to simulate. All file paths (structure file and MDP files) must be absolute.
+The samplesheet defines molecular systems and their simulation parameters. Each row represents one molecular system to simulate.
 
 ```csv title="samplesheet.csv"
 sample,structure,em_mdp,nvt_mdp,npt_mdp,md_mdp,forcefield,box_type,distance_to_box
 LYSOZYME,/data/1AKI.pdb,/data/em.mdp,/data/nvt.mdp,/data/npt.mdp,/data/md.mdp,charmm27,cubic,1.0
-BSA,/data/1A28.pdb,/data/em.mdp,/data/nvt.mdp,/data/npt.mdp,/data/md.mdp,amber14sb,dodecahedron,1.2
+UBIQUITIN,/data/1UBQ.pdb,/data/em.mdp,/data/nvt.mdp,/data/npt.mdp,/data/md.mdp,amber99sb,dodecahedron,1.2
 ```
 
-### Samplesheet columns
+File paths can be absolute, relative to the directory where you launch the pipeline, or URLs (e.g. https://…).
 
-| Column           | Required | Description                                                                                                    |
-| ---------------- | -------- | -------------------------------------------------------------------------------------------------------------- |
-| `sample`         | Yes      | Sample name (no spaces). Identifies the molecular system for output files.                                     |
-| `structure`      | Yes      | Absolute path to PDB structure file. Must end with `.pdb`.                                                     |
-| `em_mdp`         | Yes      | Absolute path to energy minimization MDP file.                                                                 |
-| `nvt_mdp`        | Yes      | Absolute path to NVT equilibration MDP file.                                                                   |
-| `npt_mdp`        | Yes      | Absolute path to NPT equilibration MDP file.                                                                   |
-| `md_mdp`         | Yes      | Absolute path to production MD simulation MDP file.                                                            |
-| `forcefield`     | Yes      | GROMACS forcefield (charmm27, charmm36, amber, amber99sb, or amber14sb).                                      |
-| `box_type`       | No       | Simulation box geometry (cubic, triclinic, or dodecahedron). Default: cubic.                                   |
-| `distance_to_box`| No       | Distance from solute to box edge in nm (0.0–5.0). Default: 1.0.                                               |
+where:
+
+| Column            | Required | Description                                                                                        |
+| ----------------- | -------- | -------------------------------------------------------------------------------------------------- |
+| `sample`          | Yes      | Sample name (no spaces). Identifies the molecular system for output files.                         |
+| `structure`       | Yes      | PDB structure file in `.pdb` format.                                                               |
+| `em_mdp`          | Yes      | Energy minimization MDP file.                                                                      |
+| `nvt_mdp`         | Yes      | NVT equilibration MDP file.                                                                        |
+| `npt_mdp`         | Yes      | NPT equilibration MDP file.                                                                        |
+| `md_mdp`          | Yes      | Production MDP file.                                                                               |
+| `forcefield`      | Yes      | GROMACS forcefield (`charmm27`, `amber03`, `amber99sb`, `amber99sb-ildn`, `oplsaa`, `gromos54a7`). |
+| `box_type`        | No       | Simulation box geometry (cubic, triclinic, or dodecahedron). Default: cubic.                       |
+| `distance_to_box` | No       | Distance from solute to box edge in nm (0.0–5.0). Default: 1.0.                                    |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+
+The pipeline currently supports **single-chain (monomeric) proteins in water** only. Protein complexes, protein–ligand systems and membrane proteins are not supported yet.
+
+- All `HETATM` records (ligands, ions, crystallographic waters and cofactors such as heme) are removed during pre-processing, without a warning.
+- Make sure the PDB file contains a single chain.
+- The structure must have no missing atoms; the pipeline stops if the PDB file reports any. Hydrogens in the input are ignored and rebuilt by `gmx pdb2gmx`.
+- Choose `--water_model` to match your forcefield (e.g. tip3p for CHARMM/AMBER).
 
 ## Running the pipeline
 
