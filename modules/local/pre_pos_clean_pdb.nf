@@ -41,5 +41,5 @@ process PRE_POS_CLEAN_PDB {
     grep -v CONECT "${sample}_temp.pdb" > "${sample}_cleaned.pdb"
 
     """
-    
+
 }

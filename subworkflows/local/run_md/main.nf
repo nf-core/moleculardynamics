@@ -22,7 +22,7 @@ workflow RUN_MD_SIMULATION {
 
     // STEP 3. Energy minimization
     RUN_ENERGY_MINIMISATION(RUN_SOLVATION.out.solvation_out)
- 
+
     // STEP 4. NVT equilibration
     RUN_NVT_EQUILIBRATION(RUN_ENERGY_MINIMISATION.out.energy_min_out)
 

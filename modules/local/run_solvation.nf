@@ -21,9 +21,9 @@
 
 process RUN_SOLVATION {
     label 'process_medium'
-  
+
     publishDir "${params.outdir}/${sample}/solvation", mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
-    
+
     input:
     tuple val(sample), path(gro), path(topol), path(itps), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp), val(forcefield), val(box_type), val(distance_to_box)
 

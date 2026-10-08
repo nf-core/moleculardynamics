@@ -53,7 +53,7 @@
             "forcefield": {
                 "type": "string",
                 "description": "GROMACS force field name",
-                "enum": ["charmm27", "amber03","amber99sb", "amber99sb-ildn", "oplsaa", "gromos54a7"],
+                "enum": ["charmm27", "amber03", "amber99sb", "amber99sb-ildn", "oplsaa", "gromos54a7"],
                 "errorMessage": "Force field must be one of the following: charmm27, amber03, amber99sb, amber99sb-ildn, oplsaa, gromos54a7"
             },
             "box_type": {
@@ -61,7 +61,6 @@
                 "description": "Type of the simulation box",
                 "enum": ["cubic", "triclinic", "dodecahedron"],
                 "default": "cubic"
-                
             },
             "distance_to_box": {
                 "type": "number",

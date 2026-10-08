@@ -19,12 +19,12 @@
 
 process ANALYSIS_RMSD {
     label 'process_low'
-  
+
     publishDir "${params.outdir}/${sample}/analysis", mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
-    
+
     input:
     tuple val(sample), path(md_tpr), path(md_noPBC_xtc)
-    
+
     output:
     tuple val(sample), path("rmsd.xvg"), emit: rmsd_xvg
     tuple val("${task.process}"),

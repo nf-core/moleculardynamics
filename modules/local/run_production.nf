@@ -11,7 +11,7 @@
 //    PRODUCTION RUN Process
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //     Description:
-//     - This is a placeholder for the production run process. 
+//     - This is a placeholder for the production run process.
 //     - It also generates a report of the simulation, including the settings used to run it.
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -19,13 +19,13 @@
 process RUN_PRODUCTION {
     label 'process_high'
     label 'process_long'
-      
+
     publishDir "${params.outdir}/${sample}/production", mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
-    
+
     input:
     tuple val(sample), path(npt_gro), path(topol), path(itps), path(md_mdp)
 
-    
+
     output:
     tuple val(sample),
         path("${md_mdp.simpleName}.tpr"),
