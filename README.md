@@ -82,7 +82,7 @@ For more details and further functionality, please refer to the [usage documenta
 
 # Pipeline output
 
-Results are organised per sample (`<outdir>/<sample>/<step>/`) and include the prepared system, the equilibration and production trajectories, a PBC-corrected trajectory and the RMSD analysis.
+The pipeline creates one folder per sample in the samplesheet, with a subfolder for each step of the pipeline (`<outdir>/<sample>/<step>/`). Each step stores its own results, such as topology files (`.top`), molecular structures (`.gro`), GROMACS run input files (`.tpr`) and trajectories (`.xtc`).
 
 To see the results of an example test run with a full size dataset refer to the [results](https://nf-co.re/moleculardynamics/results) tab on the nf-core website pipeline page.
 For more details about the output files and reports, please refer to the
