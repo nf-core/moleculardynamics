@@ -4,8 +4,7 @@
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {
-                "nf-core": {
-                }
+                "nf-core": {}
             },
             "subworkflows": {
                 "nf-core": {
@@ -17,7 +16,8 @@
                     "utils_nfcore_pipeline": {
                         "branch": "master",
                         "git_sha": "51ae5406a030d4da1e49e4dab49756844fdd6c7a",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": ["subworkflows"],
+                        "patch": "subworkflows/nf-core/utils_nfcore_pipeline/utils_nfcore_pipeline.diff"
                     },
                     "utils_nfschema_plugin": {
                         "branch": "master",

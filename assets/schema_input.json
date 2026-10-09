@@ -19,8 +19,8 @@
                 "description": "Path to the structure file (PDB format)",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^\\S+\\.pdb$",
+                "errorMessage": "Structure file must be provided, cannot contain spaces and must have extension '.pdb'"
             },
             "em_mdp": {
                 "type": "string",
@@ -50,17 +50,17 @@
                 "exists": true,
                 "errorMessage": "Production MD MDP file must be provided and must exist"
             },
-            "force_field": {
+            "forcefield": {
                 "type": "string",
-                "enum": ["charmm27", "charmm36", "amber", "amber99sb", "amber14sb"],
-                "errorMessage": "Force field must be one of the following: charmm27, charmm36, amber, amber99sb, amber14sb"
+                "description": "GROMACS force field name",
+                "enum": ["charmm27", "amber03", "amber99sb", "amber99sb-ildn", "oplsaa", "gromos54a7"],
+                "errorMessage": "Force field must be one of the following: charmm27, amber03, amber99sb, amber99sb-ildn, oplsaa, gromos54a7"
             },
             "box_type": {
                 "type": "string",
                 "description": "Type of the simulation box",
                 "enum": ["cubic", "triclinic", "dodecahedron"],
                 "default": "cubic"
-                
             },
             "distance_to_box": {
                 "type": "number",
@@ -69,14 +69,8 @@
                 "maximum": 5.0,
                 "errorMessage": "Distance to box must be a number between 0.0 and 5.0 nm",
                 "default": 1.0
-            },
-            "outputdir": {
-                "type": "string",
-                "format": "file-path",
-                "exists": true
             }
-        
         },
-        "required": ["sample", "structure", "em_mdp", "nvt_mdp", "npt_mdp", "md_mdp", "force_field"]
+        "required": ["sample", "structure", "em_mdp", "nvt_mdp", "npt_mdp", "md_mdp", "forcefield"]
     }
 }

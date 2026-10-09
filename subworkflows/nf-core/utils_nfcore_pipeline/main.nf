@@ -83,6 +83,15 @@ def processVersionsFromYAML(yaml_file) {
     return yaml.dumpAsMap(versions).trim()
 }
 
+def processVersionsFromTopic(version_record) {
+    def yaml = new org.yaml.snakeyaml.Yaml()
+    def process_name = version_record[0].toString().tokenize(':')[-1]
+    def tool_name = version_record[1].toString()
+    def tool_version = version_record[2].toString()
+    def versions = [(process_name): [(tool_name): tool_version]]
+    return yaml.dumpAsMap(versions).trim()
+}
+
 //
 // Get workflow version for pipeline
 //
@@ -98,7 +107,17 @@ def workflowVersionToYAML() {
 // Get channel of software versions used in pipeline in YAML format
 //
 def softwareVersionsToYAML(ch_versions) {
-    return ch_versions.unique().map { version -> processVersionsFromYAML(version) }.unique().mix(Channel.of(workflowVersionToYAML()))
+    return ch_versions
+        .unique()
+        .map { version ->
+            if (version instanceof List && version.size() >= 3) {
+                processVersionsFromTopic(version)
+            } else {
+                processVersionsFromYAML(version)
+            }
+        }
+        .unique()
+        .mix(channel.of(workflowVersionToYAML()))
 }
 
 //

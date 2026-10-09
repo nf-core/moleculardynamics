@@ -1,4 +1,6 @@
 #!/usr/bin/env nextflow
+nextflow.preview.topic = true
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     nf-core/moleculardynamics

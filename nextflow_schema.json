@@ -38,6 +38,57 @@
                 }
             }
         },
+        "md_simulation_options": {
+            "title": "MD simulation options",
+            "type": "object",
+            "fa_icon": "fas fa-atom",
+            "description": "GROMACS executable, software environment and system setup options applied to every sample.",
+            "properties": {
+                "gmx_cmd": {
+                    "type": "string",
+                    "default": "gmx",
+                    "description": "GROMACS executable used for every GROMACS call.",
+                    "help_text": "Change this if your GROMACS installation uses a different binary name, e.g. `gmx_mpi` or `gmx_d`.",
+                    "fa_icon": "fas fa-terminal"
+                },
+                "water_model": {
+                    "type": "string",
+                    "default": "spce",
+                    "description": "Water model passed to `gmx pdb2gmx -water`.",
+                    "enum": ["none", "spc", "spce", "tip3p", "tip4p", "tip5p", "tips3p"],
+                    "fa_icon": "fas fa-tint"
+                },
+                "water_coordinates": {
+                    "type": "string",
+                    "default": "spc216.gro",
+                    "description": "Pre-equilibrated solvent box passed to `gmx solvate -cs`.",
+                    "help_text": "Must be consistent with `--water_model`: `spc216.gro` works for all 3-site models (spc, spce, tip3p, tips3p), `tip4p.gro` for tip4p and `tip5p.gro` for tip5p.",
+                    "pattern": "^\\S+\\.gro$",
+                    "fa_icon": "fas fa-water"
+                },
+                "ion_concentration": {
+                    "type": "number",
+                    "default": 0.15,
+                    "minimum": 0,
+                    "description": "Salt concentration (mol/L) passed to `gmx genion -conc`. The system is always neutralised with NA/CL ions.",
+                    "fa_icon": "fas fa-flask"
+                },
+                "gromacs_container": {
+                    "type": "string",
+                    "default": "quay.io/biocontainers/gromacs:2022",
+                    "description": "Container image used for all GROMACS processes.",
+                    "hidden": true,
+                    "fa_icon": "fab fa-docker"
+                },
+                "gromacs_conda": {
+                    "type": "string",
+                    "default": "bioconda::gromacs=2022",
+                    "description": "Conda package used for all GROMACS processes with `-profile conda` or `-profile mamba`.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-box"
+                }
+            }
+        },
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",
@@ -161,6 +212,9 @@
     "allOf": [
         {
             "$ref": "#/$defs/input_output_options"
+        },
+        {
+            "$ref": "#/$defs/md_simulation_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"
