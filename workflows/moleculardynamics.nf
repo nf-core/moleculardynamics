@@ -23,6 +23,7 @@ workflow MOLECULARDYNAMICS {
 
     take:
     ch_samplesheet // channel: samplesheet read in from --input
+    outdir
 
     main:
     // Print out parameters for logging
@@ -70,17 +71,36 @@ workflow MOLECULARDYNAMICS {
     ANALYSIS_RMSD(ch_rmsd_input)
     ANALYSIS_RMSD.out.rmsd_xvg.view { "✅ RMSD analysis completed: $it" }
 
-    ch_versions = channel.topic('versions')
+    def ch_versions = channel.empty()
 
+    //
     // Collate and save software versions
-    softwareVersionsToYAML(ch_versions)
+    //
+    def topic_versions = channel.topic("versions")
+        .distinct()
+        .branch { entry ->
+            versions_file: entry instanceof Path
+            versions_tuple: true
+        }
+
+    def topic_versions_string = topic_versions.versions_tuple
+        .map { process, tool, version ->
+            [ process[process.lastIndexOf(':')+1..-1], "  ${tool}: ${version}" ]
+        }
+        .groupTuple(by:0)
+        .map { process, tool_versions ->
+            tool_versions.unique().sort()
+            "${process}:\n${tool_versions.join('\n')}"
+        }
+
+    def ch_collated_versions = softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+        .mix(topic_versions_string)
         .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
+            storeDir: "${outdir}/pipeline_info",
             name: 'nf_core_'  +  'moleculardynamics_software_'  + 'versions.yml',
             sort: true,
             newLine: true
-        ).set { ch_collated_versions }
-
+        )
 
     emit:
     versions           = ch_collated_versions        // channel: [ path(versions.yml) ]
