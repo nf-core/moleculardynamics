@@ -18,12 +18,12 @@
 
 
 process RUN_TOPOLOGY {
-   
+
     publishDir "${outdir}", mode: 'copy'
-    
+
     input:
     tuple val(sample), path(checked_pdb), val(forcefield), val(box_type), val(distance_to_box), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp) into checked_pdb
-    
+
     output:
     tuple val(sample),
         path("${sample}.gro"),    // gro file

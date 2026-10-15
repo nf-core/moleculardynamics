@@ -16,12 +16,12 @@
 */
 
 process RUN_ENERGY_MINIMISATION {
-  
+
     publishDir "${outdir}", mode: 'copy'
-    
+
     input:
     tuple val(sample), path(gro_box_solvated_ions), path(topol), path(itps), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp), val(outdir)
-    
+
     output:
     tuple val(sample),
         path("${em_mdp.simpleName}.tpr"),

@@ -7,13 +7,13 @@
 
 👩‍💻 I'm working on it, so please be patient.
 
-
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Open_In_GitHub_Codespaces-black?labelColor=grey&logo=github)](https://github.com/codespaces/new/nf-core/moleculardynamics)
 [![GitHub Actions CI Status](https://github.com/nf-core/moleculardynamics/actions/workflows/nf-test.yml/badge.svg)](https://github.com/nf-core/moleculardynamics/actions/workflows/nf-test.yml)
 [![GitHub Actions Linting Status](https://github.com/nf-core/moleculardynamics/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/moleculardynamics/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/moleculardynamics/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
-[![Nextflow](https://img.shields.io/badge/version-%E2%89%A524.10.5-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
-[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.3.2-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.3.2)
+[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.4-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
+[![nf-core template version](https://img.shields.io/badge/nf--core_template-4.1.0-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/4.1.0)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
@@ -23,13 +23,13 @@
 
 # Introduction
 
-**nf-core/moleculardynamics** is a bioinformatics pipeline for running molecular dynamic simulations (MD) using GROMACS open-source software. This workflow enables researchers to perform standard protein simulations in a fully automated manner, with minimal configuration, on both local and high-performance computing (HPC) environments. 
+**nf-core/moleculardynamics** is a bioinformatics pipeline for running molecular dynamic simulations (MD) using GROMACS open-source software. This workflow enables researchers to perform standard protein simulations in a fully automated manner, with minimal configuration, on both local and high-performance computing (HPC) environments.
 
 We are currently working on the following tasks:
+
 1.  🚀📆 Official release of the `nf-core/moleculardynamics` pipeline.
 2.  🛠👩‍💻 Expanding the pipeline’s capabilities to include more analysis modules (e.g., RMSF, distances), and integrating specialized tools for membrane proteins and protein-ligand complexes.
 3.  📚📝 Generating a comprehensive test dataset.
-
 
 <!-- TODO nf-core:
    Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
@@ -37,7 +37,7 @@ We are currently working on the following tasks:
    to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
 -->
 
-# Pipeline 
+# Pipeline
 
 <h1>
   <picture>
@@ -46,24 +46,24 @@ We are currently working on the following tasks:
   </picture>
 </h1>
 
-
 The `nf-core/moleculardynamics` pipeline automates a standard GROMACS MD simulation workflow. The major steps are:
-*   **Input pre-processing:** From the PDB structure, remove the missing atoms.
-*   **Production run:** Main subworkflow of the pipeline. 
-    *   **Generation of molecular topology**,
-    *   **System solvation**, and ion addition to neutralize the system.
-    *   **Energy Minimization:** Removal of steric clashes and relaxation of the initial structure.
-    *   **Equilibration:** NVT (constant Number, Volume, Temperature) and NPT (constant Number, Pressure, Temperature) equilibration to bring the system to the desired temperature and density.
-    *   **Production MD:** Execution of the main molecular dynamics simulation.
-*   **Post-processing:** Centering the protein and remove periodic boundary condition (PBC).
-*   **Analysis:** Preliminary analysis of the Root-Mean-Square Deviation (RMSD).
 
+- **Input pre-processing:** From the PDB structure, remove the missing atoms.
+- **Production run:** Main subworkflow of the pipeline.
+  - **Generation of molecular topology**,
+  - **System solvation**, and ion addition to neutralize the system.
+  - **Energy Minimization:** Removal of steric clashes and relaxation of the initial structure.
+  - **Equilibration:** NVT (constant Number, Volume, Temperature) and NPT (constant Number, Pressure, Temperature) equilibration to bring the system to the desired temperature and density.
+  - **Production MD:** Execution of the main molecular dynamics simulation.
+- **Post-processing:** Centering the protein and remove periodic boundary condition (PBC).
+- **Analysis:** Preliminary analysis of the Root-Mean-Square Deviation (RMSD).
 
 # Usage
+
 [👩‍💻 working on it]
 
 > [!NOTE]
-> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/get_started/environment_setup/overview) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/get_started/run-your-first-pipeline) with `-profile test` before running the workflow on actual data.
 
 <!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
      Explain what rows and columns represent. For instance (please edit as appropriate):
@@ -101,11 +101,12 @@ nextflow run nf-core/moleculardynamics \
 ``` -->
 
 > [!WARNING]
-> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
+> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/running/run-pipelines#using-parameter-files).
 
 For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/moleculardynamics/usage) and the [parameter documentation](https://nf-co.re/moleculardynamics/parameters).
 
 # Pipeline output
+
 [👩‍💻 working on it]
 
 To see the results of an example test run with a full size dataset refer to the [results](https://nf-co.re/moleculardynamics/results) tab on the nf-core website pipeline page.
@@ -117,16 +118,16 @@ For more details about the output files and reports, please refer to the
 nf-core/moleculardynamics has been developed by Sara Tolosa Alarcón ([@sarata00](https://github.com/sarata00)) from the [Computational Biology Group](https://www.bsc.es/discover-bsc/organisation/scientific-structure/computational-biology) at the [Barcelona Supercomputing Center](https://www.bsc.es/) under the [deCYPher project](https://www.decypher.bio/) and supervision of Miguel Romero-Durana ([@migromero](https://github.com/migromero)).
 
 # Contributions and Support
+
 [👩‍💻 working on it]
 
-
-If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
+If you would like to contribute to this pipeline, please see the [contributing guidelines](docs/CONTRIBUTING.md).
 
 For further information or help, don't hesitate to get in touch on the [Slack `#moleculardynamics` channel](https://nfcore.slack.com/channels/moleculardynamics) (you can join with [this invite](https://nf-co.re/join/slack)).
 
 # Citations
-[👩‍💻 working on it]
 
+[👩‍💻 working on it]
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
 <!-- If you use nf-core/moleculardynamics for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->

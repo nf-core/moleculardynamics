@@ -60,7 +60,6 @@
                 "description": "Type of the simulation box",
                 "enum": ["cubic", "triclinic", "dodecahedron"],
                 "default": "cubic"
-                
             },
             "distance_to_box": {
                 "type": "number",
@@ -75,7 +74,6 @@
                 "format": "file-path",
                 "exists": true
             }
-        
         },
         "required": ["sample", "structure", "em_mdp", "nvt_mdp", "npt_mdp", "md_mdp", "force_field"]
     }

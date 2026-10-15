@@ -20,9 +20,9 @@
 
 
 process RUN_SOLVATION {
-  
+
     publishDir "${outdir}", mode: 'copy'
-    
+
     input:
         tuple val(sample), path(gro), path(topol), path(itps), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp), val(forcefield), val(box_type), val(distance_to_box), val(outdir)
 

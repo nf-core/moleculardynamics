@@ -16,7 +16,7 @@ workflow RUN_MD_SIMULATION {
 
     main:
     // STEP 1. Generate topology
-    topology_out        = RUN_TOPOLOGY(ch_preprocessing, force_field, outdir)   
+    topology_out        = RUN_TOPOLOGY(ch_preprocessing, force_field, outdir)
 
     // STEP 2. Solvating the system + adding ions
     solvation_out          = RUN_SOLVATION(topology_out, outdir)
@@ -24,7 +24,7 @@ workflow RUN_MD_SIMULATION {
     // STEP 3. Energy minimization
     // ch_em_mdp           = Channel.fromPath("${inputdir}/input/em*.mdp")
     energy_min_out      = RUN_ENERGY_MINIMISATION(solvation_out, outdir)
- 
+
     // STEP 4. NVT equilibration
     nvt_equilibration_out  = RUN_NVT_EQUILIBRATION(energy_min_out, outdir)
 

@@ -19,7 +19,7 @@
 
 process PRE_POS_CLEAN_PDB {
         publishDir "${outdir}", mode: 'copy'
-    
+
         input:
         tuple val(sample), path(pdb), val(forcefield), val(box_type), val(distance_to_box), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
 
@@ -31,5 +31,5 @@ process PRE_POS_CLEAN_PDB {
         grep -v HETATM "$pdb" > "${sample}_temp.pdb"
         grep -v CONECT "${sample}_temp.pdb" > "${sample}_cleaned.pdb"
         """
-    
+
 }
