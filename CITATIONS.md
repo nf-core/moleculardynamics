@@ -10,9 +10,11 @@
 
 ## Pipeline tools
 
+- [GROMACS](https://www.gromacs.org/)
 
+  > Abraham MJ, Murtola T, Schulz R, Páll S, Smith JC, Hess B, Lindahl E. GROMACS: High performance molecular simulations through multi-level parallelism from laptops to supercomputers. SoftwareX. 2015;1-2:19-25. doi: 10.1016/j.softx.2015.06.001.
 
-
+  > Van Der Spoel D, Lindahl E, Hess B, Groenhof G, Mark AE, Berendsen HJ. GROMACS: fast, flexible, and free. J Comput Chem. 2005 Dec;26(16):1701-18. doi: 10.1002/jcc.20291. PubMed PMID: 16211538.
 
 ## Software packaging/containerisation tools
 

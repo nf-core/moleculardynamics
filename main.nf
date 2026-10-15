@@ -24,8 +24,6 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_mole
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-
-
 //
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
@@ -40,7 +38,8 @@ workflow NFCORE_MOLECULARDYNAMICS {
     // WORKFLOW: Run pipeline
     //
     MOLECULARDYNAMICS (
-        samplesheet
+        samplesheet,
+        params.outdir,
     )
 }
 /*
@@ -61,7 +60,10 @@ workflow {
         params.monochrome_logs,
         args,
         params.outdir,
-        params.input
+        params.input,
+        params.help,
+        params.help_full,
+        params.show_hidden
     )
 
     //
@@ -79,7 +81,6 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        params.hook_url,
     )
 }
 

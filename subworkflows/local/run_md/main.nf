@@ -12,28 +12,30 @@ workflow RUN_MD_SIMULATION {
 
     take:
     ch_preprocessing
-    outdir
 
     main:
     // STEP 1. Generate topology
-    topology_out        = RUN_TOPOLOGY(ch_preprocessing, force_field, outdir)   
+    RUN_TOPOLOGY(ch_preprocessing)
 
     // STEP 2. Solvating the system + adding ions
-    solvation_out          = RUN_SOLVATION(topology_out, outdir)
+    RUN_SOLVATION(RUN_TOPOLOGY.out.topology_out)
 
     // STEP 3. Energy minimization
-    // ch_em_mdp           = Channel.fromPath("${inputdir}/input/em*.mdp")
-    energy_min_out      = RUN_ENERGY_MINIMISATION(solvation_out, outdir)
- 
+    RUN_ENERGY_MINIMISATION(RUN_SOLVATION.out.solvation_out)
+
     // STEP 4. NVT equilibration
-    nvt_equilibration_out  = RUN_NVT_EQUILIBRATION(energy_min_out, outdir)
+    RUN_NVT_EQUILIBRATION(RUN_ENERGY_MINIMISATION.out.energy_min_out)
 
     // STEP 5. NPT equilibration
-    npt_equilibration_out = RUN_NPT_EQUILIBRATION(nvt_equilibration_out, outdir)
+    RUN_NPT_EQUILIBRATION(RUN_NVT_EQUILIBRATION.out.nvt_equilibration_out)
 
     // STEP 6. Production run
-    production_run_out  = RUN_PRODUCTION(npt_equilibration_out, outdir)
+    RUN_PRODUCTION(RUN_NPT_EQUILIBRATION.out.npt_equilibration_out)
 
     emit:
-    md_result = production_run_out
+    // production_out is tuple(sample, tpr, gro, xtc)
+    md_tpr    = RUN_PRODUCTION.out.production_out.map { tuple(it[0], it[1]) }
+    md_gro    = RUN_PRODUCTION.out.production_out.map { tuple(it[0], it[2]) }
+    md_xtc    = RUN_PRODUCTION.out.production_out.map { tuple(it[0], it[3]) }
+    md_report = RUN_PRODUCTION.out.md_report
 }
