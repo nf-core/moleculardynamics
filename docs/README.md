@@ -1,6 +1,6 @@
-# nf-core/mdsimulations: Documentation
+# nf-core/moleculardynamics: Documentation
 
-The nf-core/mdsimulations documentation is split into the following pages:
+The nf-core/moleculardynamics documentation is split into the following pages:
 
 - [Usage](usage.md)
   - An overview of how the pipeline works, how to run it and a description of all of the different command-line flags.

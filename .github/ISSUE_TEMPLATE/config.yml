@@ -2,6 +2,6 @@ contact_links:
   - name: Join nf-core
     url: https://nf-co.re/join
     about: Please join the nf-core community here
-  - name: "Slack #mdsimulations channel"
-    url: https://nfcore.slack.com/channels/mdsimulations
-    about: Discussion about the nf-core/mdsimulations pipeline
+  - name: "Slack #moleculardynamics channel"
+    url: https://nfcore.slack.com/channels/moleculardynamics
+    about: Discussion about the nf-core/moleculardynamics pipeline

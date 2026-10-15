@@ -4,15 +4,15 @@
   |\\ | |__  __ /  ` /  \\ |__) |__         }  {
   | \\| |       \\__, \\__/ |  \\ |___     \\`-._,-`-,
                                         `._,._,'
-  nf-core/mdsimulations ${version}
+  nf-core/moleculardynamics ${version}
 ----------------------------------------------------
 Run Name: $runName
 
 <% if (success){
-    out << "## nf-core/mdsimulations execution completed successfully! ##"
+    out << "## nf-core/moleculardynamics execution completed successfully! ##"
 } else {
     out << """####################################################
-## nf-core/mdsimulations execution completed unsuccessfully! ##
+## nf-core/moleculardynamics execution completed unsuccessfully! ##
 ####################################################
 The exit status of the task that caused the workflow execution to fail was: $exitStatus.
 The full error message was:
@@ -35,5 +35,5 @@ Pipeline Configuration:
 <% out << summary.collect{ k,v -> " - $k: $v" }.join("\n") %>
 
 --
-nf-core/mdsimulations
-https://github.com/nf-core/mdsimulations
+nf-core/moleculardynamics
+https://github.com/nf-core/moleculardynamics
