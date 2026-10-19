@@ -17,15 +17,15 @@
 */
 
 process ANALYSIS_RMSD {
-  
+
     publishDir "${outdir}/analysis", mode: 'copy'
-    
+
     input:
         path md_noPBC_xtc
         path md_gro
         path md_topol
         val outdir
-    
+
     output:
         path "rmsd.xvg"       , emit: rmsd_xvg
 

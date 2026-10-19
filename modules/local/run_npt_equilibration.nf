@@ -16,13 +16,13 @@
 */
 
 process RUN_NPT_EQUILIBRATION {
-  
+
     publishDir "${outdir}", mode: 'copy'
-    
+
     input:
     tuple val(sample), path(nvt_gro), path(topol), path(itps), path(npt_mdp), path(md_mdp), val(outdir)
 
-    
+
     output:
     tuple val(sample),
         path("${npt_mdp.simpleName}.tpr"),

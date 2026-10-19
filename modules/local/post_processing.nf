@@ -17,14 +17,14 @@
 */
 
 process POST_PROCESSING {
-  
+
     publishDir "${outdir}", mode: 'copy'
-    
+
     input:
         path md_xtc
         path md_tpr
         val outdir
-    
+
     output:
         path "md_noPBC.xtc"       , emit: post_xtc
 

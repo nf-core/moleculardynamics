@@ -11,26 +11,26 @@
 //    PRODUCTION RUN Process
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //     Description:
-//     - This is a placeholder for the production run process. 
+//     - This is a placeholder for the production run process.
 //     - It also generates a report of the simulation, including the settings used to run it.
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
 process RUN_PRODUCTION {
-      
+
     publishDir "${outdir}", mode: 'copy'
-    
+
     input:
     tuple val(sample), path(npt_gro), path(topol), path(itps), path(md_mdp), val(outdir)
 
-    
+
     output:
     tuple val(sample),
     path("${md_mdp.simpleName}.tpr"),
     path("${md_mdp.simpleName}.edr"),
     path("${md_mdp.simpleName}.gro"),
     path("${md_mdp.simpleName}.log"),
-    path("topol.top"), path(itps), path("MD_REPORT"), 
+    path("topol.top"), path(itps), path("MD_REPORT"),
     val(outdir)
     emit: production_out
 

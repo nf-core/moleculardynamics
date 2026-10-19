@@ -18,14 +18,14 @@
 */
 
 process PRE_POS_CHECK_MISSING_ATOMS {
-            
+
         input:
         tuple val(sample), path(cleaned_pdb), val(forcefield), val(box_type), val(distance_to_box), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
 
         output:
-        tuple val(sample), 
-              path("${sample}_checked.pdb"), 
-              val(forcefield), val(box_type), val(distance_to_box), 
+        tuple val(sample),
+              path("${sample}_checked.pdb"),
+              val(forcefield), val(box_type), val(distance_to_box),
               path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
               emit: checked_pdb
 
@@ -40,5 +40,5 @@ process PRE_POS_CHECK_MISSING_ATOMS {
             echo "No missing atoms found in $cleaned_pdb"
         fi
         """
-    
+
 }
