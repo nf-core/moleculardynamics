@@ -6,51 +6,48 @@
 
 ## Introduction
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
-
 ## Samplesheet input
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+You will need to create a samplesheet with information about the molecular dynamics simulations you would like to set up and run before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with the required columns and a header row as shown in the examples below.
 
 ```bash
 --input '[path to samplesheet file]'
 ```
 
-### Multiple runs of the same sample
+### Samplesheet format
 
-The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
-
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
-```
-
-### Full samplesheet
-
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 3 columns to match those defined in the table below.
-
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
+The samplesheet defines molecular systems and their simulation parameters. Each row represents one molecular system to simulate.
 
 ```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz
-CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz
-TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,
-TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
+sample,structure,em_mdp,nvt_mdp,npt_mdp,md_mdp,forcefield,box_type,distance_to_box
+LYSOZYME,/data/1AKI.pdb,/data/em.mdp,/data/nvt.mdp,/data/npt.mdp,/data/md.mdp,charmm27,cubic,1.0
+UBIQUITIN,/data/1UBQ.pdb,/data/em.mdp,/data/nvt.mdp,/data/npt.mdp,/data/md.mdp,amber99sb,dodecahedron,1.2
 ```
 
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+File paths can be absolute, relative to the directory where you launch the pipeline, or URLs (e.g. https://…).
+
+where:
+
+| Column            | Required | Description                                                                                        |
+| ----------------- | -------- | -------------------------------------------------------------------------------------------------- |
+| `sample`          | Yes      | Sample name (no spaces). Identifies the molecular system for output files.                         |
+| `structure`       | Yes      | PDB structure file in `.pdb` format.                                                               |
+| `em_mdp`          | Yes      | Energy minimization MDP file.                                                                      |
+| `nvt_mdp`         | Yes      | NVT equilibration MDP file.                                                                        |
+| `npt_mdp`         | Yes      | NPT equilibration MDP file.                                                                        |
+| `md_mdp`          | Yes      | Production MDP file.                                                                               |
+| `forcefield`      | Yes      | GROMACS forcefield (`charmm27`, `amber03`, `amber99sb`, `amber99sb-ildn`, `oplsaa`, `gromos54a7`). |
+| `box_type`        | No       | Simulation box geometry (cubic, triclinic, or dodecahedron). Default: cubic.                       |
+| `distance_to_box` | No       | Distance from solute to box edge in nm (0.0–5.0). Default: 1.0.                                    |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+
+The pipeline currently supports **single-chain (monomeric) proteins in water** only. Protein complexes, protein–ligand systems and membrane proteins are not supported yet.
+
+- All `HETATM` records (ligands, ions, crystallographic waters and cofactors such as heme) are removed during pre-processing, without a warning.
+- Make sure the PDB file contains a single chain.
+- The structure must have no missing atoms; the pipeline stops if the PDB file reports any. Hydrogens in the input are ignored and rebuilt by `gmx pdb2gmx`.
+- Choose `--water_model` to match your forcefield (e.g. tip3p for CHARMM/AMBER).
 
 ## Running the pipeline
 
@@ -137,8 +134,13 @@ They are loaded in sequence, so later profiles can overwrite earlier profiles.
 If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer environment.
 
 - `test`
-  - A profile with a complete configuration for automated testing
+  - A profile with a minimal test dataset for fast CI smoke tests
   - Includes links to test data so needs no other parameters
+  - Run with: `nextflow run . -profile test,docker --outdir results`
+- `test_full`
+  - A profile with a larger, reproducible test dataset for full pipeline validation
+  - Includes links to test data so needs no other parameters
+  - Run with: `nextflow run . -profile test_full,docker --outdir results`
 - `docker`
   - A generic configuration profile to be used with [Docker](https://docker.com/)
 - `singularity`
