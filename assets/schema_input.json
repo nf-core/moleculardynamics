@@ -9,25 +9,72 @@
         "properties": {
             "sample": {
                 "type": "string",
+                "description": "Name of the molecule to simulate",
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id"]
             },
-            "fastq_1": {
+            "structure": {
                 "type": "string",
+                "description": "Path to the structure file (PDB format)",
                 "format": "file-path",
                 "exists": true,
                 "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
                 "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
             },
-            "fastq_2": {
+            "em_mdp": {
                 "type": "string",
+                "description": "Path to the energy minimization MDP file",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "errorMessage": "Energy minimization MDP file must be provided and must exist"
+            },
+            "nvt_mdp": {
+                "type": "string",
+                "description": "Path to the NVT equilibration MDP file",
+                "format": "file-path",
+                "exists": true,
+                "errorMessage": "NVT equilibration MDP file must be provided and must exist"
+            },
+            "npt_mdp": {
+                "type": "string",
+                "description": "Path to the NPT equilibration MDP file",
+                "format": "file-path",
+                "exists": true,
+                "errorMessage": "NPT equilibration MDP file must be provided and must exist"
+            },
+            "md_mdp": {
+                "type": "string",
+                "description": "Path to the production MD MDP file",
+                "format": "file-path",
+                "exists": true,
+                "errorMessage": "Production MD MDP file must be provided and must exist"
+            },
+            "force_field": {
+                "type": "string",
+                "enum": ["charmm27", "charmm36", "amber", "amber99sb", "amber14sb"],
+                "errorMessage": "Force field must be one of the following: charmm27, charmm36, amber, amber99sb, amber14sb"
+            },
+            "box_type": {
+                "type": "string",
+                "description": "Type of the simulation box",
+                "enum": ["cubic", "triclinic", "dodecahedron"],
+                "default": "cubic"
+            },
+            "distance_to_box": {
+                "type": "number",
+                "description": "Distance from the solute to the edge of the box in nm",
+                "minimum": 0.0,
+                "maximum": 5.0,
+                "errorMessage": "Distance to box must be a number between 0.0 and 5.0 nm",
+                "default": 1.0
+            },
+            "outputdir": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["sample", "structure", "em_mdp", "nvt_mdp", "npt_mdp", "md_mdp", "force_field"]
     }
 }
