@@ -14,7 +14,6 @@ Initial release of nf-core/moleculardynamics, created with the [nf-core](https:/
 - Output documentation (`docs/output.md`), updated usage documentation (`docs/usage.md`) and GROMACS citation in `README.md` and `CITATIONS.md`.
 - nf-test snapshot and explicit checks for the pipeline test (per-sample output folders, no published MDP files, 11 RMSD frames starting at 0), with the non-reproducible GROMACS outputs excluded in `tests/.nftignore`.
 
-
 ### `Changed`
 
 - Template update to nf-core/tools 4.2.1: the pipeline now works with the latest Nextflow (26.x). Software versions are collated from the `versions` topic by the template's own code, so the local patch to `utils_nfcore_pipeline` is no longer needed and has been removed. `nextflow.preview.topic` and the help/summary banners in `nextflow.config` are gone.
