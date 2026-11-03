@@ -9,13 +9,15 @@ Initial release of nf-core/moleculardynamics, created with the [nf-core](https:/
 
 ### `Added`
 
-- `test` (2 ps production, ~1.5 min on 4 CPUs) and `test_full` (50 ps) profiles using the lysozyme (PDB 1AKI) dataset from nf-core/test-datasets#1949.
+- `test` (2 ps production, ~1.5 min on 4 CPUs) and `test_full` (1 ns) profiles using the lysozyme (PDB 1AKI) dataset from nf-core/test-datasets#1949.
 - `gmx_cmd`, `water_model`, `water_coordinates`, `ion_concentration`, `gromacs_container` and `gromacs_conda` documented and validated in `nextflow_schema.json`.
 - Output documentation (`docs/output.md`), updated usage documentation (`docs/usage.md`) and GROMACS citation in `README.md` and `CITATIONS.md`.
+- nf-test snapshot and explicit checks for the pipeline test (per-sample output folders, no published MDP files, 11 RMSD frames starting at 0), with the non-reproducible GROMACS outputs excluded in `tests/.nftignore`.
+
 
 ### `Changed`
 
-- Template update to nf-core/tools 4.1.0: the pipeline now works with the latest Nextflow (26.x). Software versions are collated from the `versions` topic by the template's own code, so the local patch to `utils_nfcore_pipeline` is no longer needed and has been removed. `nextflow.preview.topic` and the help/summary banners in `nextflow.config` are gone.
+- Template update to nf-core/tools 4.2.1: the pipeline now works with the latest Nextflow (26.x). Software versions are collated from the `versions` topic by the template's own code, so the local patch to `utils_nfcore_pipeline` is no longer needed and has been removed. `nextflow.preview.topic` and the help/summary banners in `nextflow.config` are gone.
 - Results are now published per sample (`<outdir>/<sample>/<step>/`), so samples no longer overwrite each other's outputs.
 - Input MDP files are no longer copied into every output folder.
 
@@ -33,6 +35,6 @@ Initial release of nf-core/moleculardynamics, created with the [nf-core](https:/
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
 | Nextflow   | >=24.10.5   | >=25.10.4   |
-| nf-schema  | 2.4.2       | 2.5.1       |
+| nf-schema  | 2.4.2       | 2.7.3       |
 
 ### `Deprecated`
