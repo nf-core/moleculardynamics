@@ -13,19 +13,40 @@ nextflow_pipeline {
         }
 
         then {
-            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
-            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_content: All files in ${params.outdir}/ with stable content
-            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
-            assert workflow.success
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            // The GROMACS results are not reproducible (hosts and dates in headers, random ion placement, mdrun outputs),
+            // so tests/.nftignore leaves them out of the snapshot and they are checked explicitly below.
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // One folder per sample in the samplesheet, with one subfolder per pipeline step
+            def sample_dir = new File("${params.outdir}/LYSOZYME_1AKI")
+            def steps = ['preprocessing', 'topology', 'solvation', 'energy_minimization', 'nvt_equilibration',
+                         'npt_equilibration', 'production', 'post_processing', 'analysis']
+            // RMSD data points (non-comment lines of the xvg file): time (ns) and RMSD (nm)
+            def rmsd = new File("${sample_dir}/analysis/rmsd.xvg").readLines()
+                .findAll { line -> line.trim() && !line.startsWith('#') && !line.startsWith('@') }
+                .collect { line -> line.trim().split(/\s+/).collect { value -> value as double } }
             assertAll(
+                { assert workflow.success},
+                { assert sample_dir.isDirectory() },
+                { assert steps.every { step -> new File("${sample_dir}/${step}").isDirectory() } },
+                // The mdp files are inputs and must not be published
+                { assert stable_name.findAll { name -> name.endsWith('.mdp') }.isEmpty() },
+                // The RMSD is computed against the starting structure, so the first frame is 0
+                // The test profile saves a frame every 0.2 ps for 2 ps (11 frames)
+                { assert rmsd.size() == 11 },
+                { assert rmsd[0][0] == 0.0 },
+                { assert rmsd[0][1] < 1e-3 },
                 { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_moleculardynamics_software_mqc_versions.yml"),
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_moleculardynamics_software_versions.yml"),
                     // All stable path name, with a relative path
-                    stable_path,
+                    stable_name,
                     // All files with stable contents
-                    stable_content
+                    stable_path
                 ).match() }
             )
         }

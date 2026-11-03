@@ -1,2 +1,7 @@
 .DS_Store
 pipeline_info/*.{html,json,txt,yml}
+**/topol.top
+**/rmsd.xvg
+**/*.{edr,log,tpr,xtc}
+**/{energy_minimization,nvt_equilibration,npt_equilibration,production}/*.gro
+**/solvation/*_box_solv_ions.gro
