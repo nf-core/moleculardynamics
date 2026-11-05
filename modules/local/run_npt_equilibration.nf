@@ -20,7 +20,8 @@ process RUN_NPT_EQUILIBRATION {
     publishDir "${outdir}", mode: 'copy'
 
     input:
-    tuple val(sample), path(nvt_gro), path(topol), path(itps), path(npt_mdp), path(md_mdp), val(outdir)
+    tuple val(sample), path(nvt_gro), path(topol), path(itps), path(npt_mdp), path(md_mdp)
+    val outdir
 
 
     output:
@@ -31,7 +32,7 @@ process RUN_NPT_EQUILIBRATION {
         path("${npt_mdp.simpleName}.log"),
         path("topol.top"),
         path(itps),
-        path(md_mdp)
+        path(md_mdp),
         emit: npt_equilibration_out
 
     script:

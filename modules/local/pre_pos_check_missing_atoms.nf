@@ -26,13 +26,13 @@ process PRE_POS_CHECK_MISSING_ATOMS {
         tuple val(sample),
               path("${sample}_checked.pdb"),
               val(forcefield), val(box_type), val(distance_to_box),
-              path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
+              path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp),
               emit: checked_pdb
 
         script:
         """
         if grep -q 'MISSING' "$cleaned_pdb"; then
-            echo "ERROR: Missing atoms found in $pdb_file" >&2
+            echo "ERROR: Missing atoms found in $cleaned_pdb" >&2
             grep 'MISSING' "$cleaned_pdb" >&2
             exit 1
         else
