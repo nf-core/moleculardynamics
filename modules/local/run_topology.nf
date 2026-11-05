@@ -22,7 +22,8 @@ process RUN_TOPOLOGY {
     publishDir "${outdir}", mode: 'copy'
 
     input:
-    tuple val(sample), path(checked_pdb), val(forcefield), val(box_type), val(distance_to_box), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp) into checked_pdb
+    tuple val(sample), path(checked_pdb), val(forcefield), val(box_type), val(distance_to_box), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
+    val outdir
 
     output:
     tuple val(sample),
@@ -30,7 +31,7 @@ process RUN_TOPOLOGY {
         path("topol.top"),                        // topology
         path("*.itp"),                             // itp files
         path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp),
-        val(forcefield), val(box_type), val(distance_to_box)
+        val(forcefield), val(box_type), val(distance_to_box),
         emit: topology_out
 
     script:

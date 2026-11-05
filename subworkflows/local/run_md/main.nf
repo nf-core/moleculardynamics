@@ -16,7 +16,7 @@ workflow RUN_MD_SIMULATION {
 
     main:
     // STEP 1. Generate topology
-    topology_out        = RUN_TOPOLOGY(ch_preprocessing, force_field, outdir)
+    topology_out        = RUN_TOPOLOGY(ch_preprocessing, outdir)
 
     // STEP 2. Solvating the system + adding ions
     solvation_out          = RUN_SOLVATION(topology_out, outdir)
@@ -35,5 +35,8 @@ workflow RUN_MD_SIMULATION {
     production_run_out  = RUN_PRODUCTION(npt_equilibration_out, outdir)
 
     emit:
-    md_result = production_run_out
+    md_report = production_run_out.production_out
+    md_tpr    = production_run_out.production_out.map { it[1] }
+    md_gro    = production_run_out.production_out.map { it[3] }
+    md_xtc    = production_run_out.production_out.map { it[2] }
 }

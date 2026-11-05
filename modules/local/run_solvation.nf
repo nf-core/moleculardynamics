@@ -24,10 +24,11 @@ process RUN_SOLVATION {
     publishDir "${outdir}", mode: 'copy'
 
     input:
-        tuple val(sample), path(gro), path(topol), path(itps), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp), val(forcefield), val(box_type), val(distance_to_box), val(outdir)
+        tuple val(sample), path(gro), path(topol), path(itps), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp), val(forcefield), val(box_type), val(distance_to_box)
+        val outdir
 
     output:
-     tuple val(sample),
+    tuple val(sample),
         path("${sample}_box.gro"),
         path("${sample}_box_solv.gro"),
         path("${sample}_box_solv_ions.gro"),
@@ -35,7 +36,7 @@ process RUN_SOLVATION {
         path("ions.mdp"),
         path("ions.tpr"),
         path(itps),
-        path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
+        path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp),
         emit: solvation_out
 
     script:

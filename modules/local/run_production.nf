@@ -21,18 +21,19 @@ process RUN_PRODUCTION {
     publishDir "${outdir}", mode: 'copy'
 
     input:
-    tuple val(sample), path(npt_gro), path(topol), path(itps), path(md_mdp), val(outdir)
+    tuple val(sample), path(npt_gro), path(topol), path(itps), path(md_mdp)
+    val outdir
 
 
     output:
     tuple val(sample),
-    path("${md_mdp.simpleName}.tpr"),
-    path("${md_mdp.simpleName}.edr"),
-    path("${md_mdp.simpleName}.gro"),
-    path("${md_mdp.simpleName}.log"),
-    path("topol.top"), path(itps), path("MD_REPORT"),
-    val(outdir)
-    emit: production_out
+        path("${md_mdp.simpleName}.tpr"),
+        path("${md_mdp.simpleName}.edr"),
+        path("${md_mdp.simpleName}.gro"),
+        path("${md_mdp.simpleName}.log"),
+        path("topol.top"), path(itps), path("MD_REPORT"),
+        val(outdir),
+        emit: production_out
 
 
     script:

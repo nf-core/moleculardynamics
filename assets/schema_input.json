@@ -19,8 +19,8 @@
                 "description": "Path to the structure file (PDB format)",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.pdb$",
+                "errorMessage": "Structure file must be provided, cannot contain spaces and must have extension '.pdb'"
             },
             "em_mdp": {
                 "type": "string",
@@ -50,7 +50,7 @@
                 "exists": true,
                 "errorMessage": "Production MD MDP file must be provided and must exist"
             },
-            "force_field": {
+            "forcefield": {
                 "type": "string",
                 "enum": ["charmm27", "charmm36", "amber", "amber99sb", "amber14sb"],
                 "errorMessage": "Force field must be one of the following: charmm27, charmm36, amber, amber99sb, amber14sb"
@@ -75,6 +75,6 @@
                 "exists": true
             }
         },
-        "required": ["sample", "structure", "em_mdp", "nvt_mdp", "npt_mdp", "md_mdp", "force_field"]
+        "required": ["sample", "structure", "em_mdp", "nvt_mdp", "npt_mdp", "md_mdp", "forcefield"]
     }
 }

@@ -3,7 +3,7 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { paramsSummaryMap       } from 'plugin/nf-schema'
+include { paramsSummaryLog       } from 'plugin/nf-schema'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_moleculardynamics_pipeline'
 
@@ -27,7 +27,7 @@ workflow MOLECULARDYNAMICS {
 
     main:
     // Print out parameters for logging
-    paramsSummaryMap(params, methodsDescriptionText(params)).view { "📝 Pipeline parameters:\n$it" }
+    log.info paramsSummaryLog(workflow, parameters_schema: "nextflow_schema.json")
 
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     // STEP 0. Unpack samplesheet into a well-defined tuple channel
@@ -67,14 +67,14 @@ workflow MOLECULARDYNAMICS {
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     // STEP 8. Post-processing: Remove periodicity, fit to reference, etc.
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    ch_postprocessed_data = POST_PROCESSING(ch_md_tpr, ch_md_gro, ch_md_xtc, params.outdir)
-    POST_PROCESSING.out.postprocessed_report.view { "✅ Post-processing completed! You can see the report here: $it" }
+    ch_postprocessed_data = POST_PROCESSING(ch_md_xtc, ch_md_tpr, params.outdir)
+    POST_PROCESSING.out.post_xtc.view { "✅ Post-processing completed! Processed trajectory: $it" }
     ch_postprocessed_xtc = ch_postprocessed_data.post_xtc
 
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     // STEP 9. Analysis: RMSD calculation
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    ANALYSIS_RMSD(ch_postprocessed_xtc, ch_postprocessed_gro, ch_postprocessed_tpr, params.outdir)
+    ANALYSIS_RMSD(ch_postprocessed_xtc, ch_md_gro, ch_md_tpr, params.outdir)
     ANALYSIS_RMSD.out.rmsd_xvg.view { "✅ RMSD analysis completed: $it" }
 
     def ch_versions = channel.empty()
@@ -110,8 +110,8 @@ workflow MOLECULARDYNAMICS {
 
     emit:
     collated_info           = ch_collated_versions        // channel: [ path(collated_versions.yml) ]
-    cleaned_pdb             = ch_cleaned_pdb              // channel: [ tuple(sample_id, path(cleaned_pdb)) ]
-    ch_postprocessed_xtc    = ch_postprocessed_xtc        // channel: [ tuple(sample_id, path(postprocessed_xtc)) ]
+    cleaned_pdb             = PRE_PROCESSING.out.cleaned_pdb  // channel: [ tuple(sample_id, path(cleaned_pdb)) ]
+    postprocessed_xtc       = ch_postprocessed_xtc        // channel: [ path(postprocessed_xtc) ]
     versions                = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
