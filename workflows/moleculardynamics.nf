@@ -3,7 +3,7 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { paramsSummaryMap       } from 'plugin/nf-schema'
+include { paramsSummaryLog       } from 'plugin/nf-schema'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_moleculardynamics_pipeline'
 
@@ -27,7 +27,7 @@ workflow MOLECULARDYNAMICS {
 
     main:
     // Print out parameters for logging
-    paramsSummaryMap(params, methodsDescriptionText(params)).view { "📝 Pipeline parameters:\n$it" }
+    log.info paramsSummaryLog(workflow, parameters_schema: "nextflow_schema.json")
 
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     // STEP 0. Unpack samplesheet into a well-defined tuple channel
