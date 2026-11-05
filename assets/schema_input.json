@@ -50,7 +50,7 @@
                 "exists": true,
                 "errorMessage": "Production MD MDP file must be provided and must exist"
             },
-            "force_field": {
+            "forcefield": {
                 "type": "string",
                 "enum": ["charmm27", "charmm36", "amber", "amber99sb", "amber14sb"],
                 "errorMessage": "Force field must be one of the following: charmm27, charmm36, amber, amber99sb, amber14sb"
@@ -75,6 +75,6 @@
                 "exists": true
             }
         },
-        "required": ["sample", "structure", "em_mdp", "nvt_mdp", "npt_mdp", "md_mdp", "force_field"]
+        "required": ["sample", "structure", "em_mdp", "nvt_mdp", "npt_mdp", "md_mdp", "forcefield"]
     }
 }
