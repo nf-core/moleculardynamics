@@ -45,7 +45,11 @@ process RUN_PRODUCTION {
     script:
     """
     echo "Running the molecular dynamics simulation"
-    ${params.gmx_cmd} grompp -f ${md_mdp} -c ${npt_gro} -p topol.top -o ${md_mdp.simpleName}.tpr
+    ${params.gmx_cmd} grompp \
+    -f ${md_mdp} \
+    -c ${npt_gro}  \
+    -p topol.top \
+    -o ${md_mdp.simpleName}.tpr
     ${params.gmx_cmd} mdrun -v -deffnm ${md_mdp.simpleName}
     ${params.gmx_cmd} report-methods -s ${md_mdp.simpleName}.tpr -o MD_REPORT.out
 
