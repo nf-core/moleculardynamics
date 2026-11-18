@@ -1,3 +1,2 @@
-sample,fastq_1,fastq_2
-SAMPLE_PAIRED_END,/path/to/fastq/files/AEG588A1_S1_L002_R1_001.fastq.gz,/path/to/fastq/files/AEG588A1_S1_L002_R2_001.fastq.gz
-SAMPLE_SINGLE_END,/path/to/fastq/files/AEG588A4_S4_L003_R1_001.fastq.gz,
+sample,structure,em_mdp,nvt_mdp,npt_mdp,md_mdp,forcefield,box_type,distance_to_box
+CYP_WT,/path/to/structure.pdb,/path/to/em.mdp,/path/to/nvt.mdp,/path/to/npt.mdp,/path/to/md.mdp,charmm27,cubic,1.0

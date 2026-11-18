@@ -6,12 +6,11 @@ include { PRE_POS_CHECK_MISSING_ATOMS } from '../../../modules/local/pre_pos_che
 workflow PRE_PROCESSING {
     take:
     ch_inputs
-    outdir
 
     main:
-    ch_clean = PRE_POS_CLEAN_PDB(ch_inputs, outdir)
-    ch_check = PRE_POS_CHECK_MISSING_ATOMS(ch_clean.cleaned)
+    PRE_POS_CLEAN_PDB(ch_inputs)
+    PRE_POS_CHECK_MISSING_ATOMS(PRE_POS_CLEAN_PDB.out.cleaned)
 
     emit:
-    cleaned_pdb = ch_check.checked_pdb
+    cleaned_pdb = PRE_POS_CHECK_MISSING_ATOMS.out.checked_pdb
 }

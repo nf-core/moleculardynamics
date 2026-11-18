@@ -1,0 +1,111 @@
+{
+    "-profile test": {
+        "content": [
+            10,
+            {
+                "ANALYSIS_RMSD": {
+                    "gromacs": "2022-conda_forge"
+                },
+                "POST_PROCESSING": {
+                    "gromacs": "2022-conda_forge"
+                },
+                "PRE_POS_CHECK_MISSING_ATOMS": {
+                    "gromacs": "2022-conda_forge"
+                },
+                "PRE_POS_CLEAN_PDB": {
+                    "gromacs": "2022-conda_forge"
+                },
+                "RUN_ENERGY_MINIMISATION": {
+                    "gromacs": "2022-conda_forge"
+                },
+                "RUN_NPT_EQUILIBRATION": {
+                    "gromacs": "2022-conda_forge"
+                },
+                "RUN_NVT_EQUILIBRATION": {
+                    "gromacs": "2022-conda_forge"
+                },
+                "RUN_PRODUCTION": {
+                    "gromacs": "2022-conda_forge"
+                },
+                "RUN_SOLVATION": {
+                    "gromacs": "2022-conda_forge"
+                },
+                "RUN_TOPOLOGY": {
+                    "gromacs": "2022-conda_forge"
+                },
+                "Workflow": {
+                    "nf-core/moleculardynamics": "v1.0.0dev"
+                }
+            },
+            [
+                "LYSOZYME_1AKI",
+                "LYSOZYME_1AKI/analysis",
+                "LYSOZYME_1AKI/analysis/rmsd.xvg",
+                "LYSOZYME_1AKI/energy_minimization",
+                "LYSOZYME_1AKI/energy_minimization/em_test.edr",
+                "LYSOZYME_1AKI/energy_minimization/em_test.gro",
+                "LYSOZYME_1AKI/energy_minimization/em_test.log",
+                "LYSOZYME_1AKI/energy_minimization/em_test.tpr",
+                "LYSOZYME_1AKI/energy_minimization/posre.itp",
+                "LYSOZYME_1AKI/energy_minimization/topol.top",
+                "LYSOZYME_1AKI/npt_equilibration",
+                "LYSOZYME_1AKI/npt_equilibration/npt_test.edr",
+                "LYSOZYME_1AKI/npt_equilibration/npt_test.gro",
+                "LYSOZYME_1AKI/npt_equilibration/npt_test.log",
+                "LYSOZYME_1AKI/npt_equilibration/npt_test.tpr",
+                "LYSOZYME_1AKI/npt_equilibration/posre.itp",
+                "LYSOZYME_1AKI/npt_equilibration/topol.top",
+                "LYSOZYME_1AKI/nvt_equilibration",
+                "LYSOZYME_1AKI/nvt_equilibration/nvt_test.edr",
+                "LYSOZYME_1AKI/nvt_equilibration/nvt_test.gro",
+                "LYSOZYME_1AKI/nvt_equilibration/nvt_test.log",
+                "LYSOZYME_1AKI/nvt_equilibration/nvt_test.tpr",
+                "LYSOZYME_1AKI/nvt_equilibration/posre.itp",
+                "LYSOZYME_1AKI/nvt_equilibration/topol.top",
+                "LYSOZYME_1AKI/post_processing",
+                "LYSOZYME_1AKI/post_processing/md_noPBC.xtc",
+                "LYSOZYME_1AKI/preprocessing",
+                "LYSOZYME_1AKI/preprocessing/LYSOZYME_1AKI_checked.pdb",
+                "LYSOZYME_1AKI/preprocessing/LYSOZYME_1AKI_cleaned.pdb",
+                "LYSOZYME_1AKI/production",
+                "LYSOZYME_1AKI/production/MD_REPORT.out",
+                "LYSOZYME_1AKI/production/md_test.edr",
+                "LYSOZYME_1AKI/production/md_test.gro",
+                "LYSOZYME_1AKI/production/md_test.log",
+                "LYSOZYME_1AKI/production/md_test.tpr",
+                "LYSOZYME_1AKI/production/md_test.xtc",
+                "LYSOZYME_1AKI/solvation",
+                "LYSOZYME_1AKI/solvation/LYSOZYME_1AKI_box.gro",
+                "LYSOZYME_1AKI/solvation/LYSOZYME_1AKI_box_solv.gro",
+                "LYSOZYME_1AKI/solvation/LYSOZYME_1AKI_box_solv_ions.gro",
+                "LYSOZYME_1AKI/solvation/ions.tpr",
+                "LYSOZYME_1AKI/solvation/posre.itp",
+                "LYSOZYME_1AKI/solvation/topol.top",
+                "LYSOZYME_1AKI/topology",
+                "LYSOZYME_1AKI/topology/LYSOZYME_1AKI.gro",
+                "LYSOZYME_1AKI/topology/posre.itp",
+                "LYSOZYME_1AKI/topology/topol.top",
+                "pipeline_info",
+                "pipeline_info/nf_core_moleculardynamics_software_versions.yml"
+            ],
+            [
+                "posre.itp:md5,c3304b04b025f8a8d4e8bf5fa72881f1",
+                "posre.itp:md5,c3304b04b025f8a8d4e8bf5fa72881f1",
+                "posre.itp:md5,c3304b04b025f8a8d4e8bf5fa72881f1",
+                "LYSOZYME_1AKI_checked.pdb:md5,925e6deb0a44945e789b05b063c3a6e8",
+                "LYSOZYME_1AKI_cleaned.pdb:md5,925e6deb0a44945e789b05b063c3a6e8",
+                "MD_REPORT.out:md5,8139a8e548fcc305eb5fc916c1236397",
+                "LYSOZYME_1AKI_box.gro:md5,a331a8fc67fb94e10e18b103ec9db4e8",
+                "LYSOZYME_1AKI_box_solv.gro:md5,cbbfbc77e94b51886fc46a558efc9e1a",
+                "posre.itp:md5,c3304b04b025f8a8d4e8bf5fa72881f1",
+                "LYSOZYME_1AKI.gro:md5,d2583441c9c4899eb270c76301d4c60f",
+                "posre.itp:md5,c3304b04b025f8a8d4e8bf5fa72881f1"
+            ]
+        ],
+        "timestamp": "2026-11-03T10:39:40.303765985",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.7"
+        }
+    }
+}
