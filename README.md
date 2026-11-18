@@ -19,44 +19,55 @@
 
 [![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23moleculardynamics-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/moleculardynamics)[![Follow on Bluesky](https://img.shields.io/badge/bluesky-%40nf__core-1185fe?labelColor=000000&logo=bluesky)](https://bsky.app/profile/nf-co.re)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
 
-## Introduction
+# Introduction
 
-**nf-core/moleculardynamics** is a bioinformatics pipeline that ...
+**nf-core/moleculardynamics** is a bioinformatics pipeline for running molecular dynamic simulations (MD) using [GROMACS](https://www.gromacs.org/). This workflow enables researchers to perform standard protein simulations in a fully automated manner, with minimal configuration, on both local and high-performance computing (HPC) environments.
 
-<!-- TODO nf-core:
-   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
-   major pipeline sections and the types of output it produces. You're giving an overview to someone new
-   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
--->
+It takes a protein structure (PDB) and GROMACS parameter files (MDP) for each sample, prepares the system (topology, solvation, ions), runs energy minimisation, NVT/NPT equilibration and a production simulation, and returns the trajectory together with a first structural analysis (RMSD).
 
-<!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
-     workflows use the "tube map" design for that. See https://nf-co.re/docs/community/brand/workflow-schematics#examples for examples.   -->
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
+We are currently working on the following tasks:
 
-## Usage
+1.  🚀📆 Official release of the `nf-core/moleculardynamics` pipeline.
+2.  🛠👩‍💻 Expanding the pipeline’s capabilities to include more analysis modules (e.g., RMSF, distances), and integrating specialized tools for membrane proteins and protein-ligand complexes.
+
+# Pipeline
+
+<h1>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/pipeline_v1.png">
+    <img alt="nf-core/moleculardynamics" src="docs/images/pipeline_v1.png">
+  </picture>
+</h1>
+
+The `nf-core/moleculardynamics` pipeline automates a standard GROMACS MD simulation workflow. The major steps are:
+
+- **Input pre-processing:** Remove heteroatoms (ligands, ions, waters) from the PDB structure and check that no atoms are missing.
+- **MD simulation:** Main subworkflow of the pipeline.
+  - **Generation of molecular topology**,
+  - **System solvation**, and ion addition to neutralize the system.
+  - **Energy Minimization:** Removal of steric clashes and relaxation of the initial structure.
+  - **Equilibration:** NVT (constant Number, Volume, Temperature) and NPT (constant Number, Pressure, Temperature) equilibration to bring the system to the desired temperature and density.
+  - **Production MD:** Execution of the main molecular dynamics simulation.
+- **Post-processing:** Centre the protein and remove periodic boundary condition (PBC) artifacts from the trajectory.
+- **Analysis:** Calculation of the Root-Mean-Square Deviation (RMSD) relative to the starting structure.
+
+# Usage
 
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/get_started/environment_setup/overview) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/get_started/run-your-first-pipeline) with `-profile test` before running the workflow on actual data.
-
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
 
 First, prepare a samplesheet with your input data that looks as follows:
 
 `samplesheet.csv`:
 
 ```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+sample,structure,em_mdp,nvt_mdp,npt_mdp,md_mdp,forcefield,box_type,distance_to_box
+LYSOZYME,/data/1AKI.pdb,/data/em.mdp,/data/nvt.mdp,/data/npt.mdp,/data/md.mdp,charmm27,cubic,1.0
 ```
 
-Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
-
--->
+Each row represents one protein system to simulate, with its structure, the MDP files for each simulation step, and the force field and box settings.
 
 Now, you can run the pipeline using:
-
-<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
 
 ```bash
 nextflow run nf-core/moleculardynamics \
@@ -70,32 +81,36 @@ nextflow run nf-core/moleculardynamics \
 
 For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/moleculardynamics/usage) and the [parameter documentation](https://nf-co.re/moleculardynamics/parameters).
 
-## Pipeline output
+# Pipeline output
+
+The pipeline creates one folder per sample in the samplesheet, with a subfolder for each step of the pipeline (`<outdir>/<sample>/<step>/`). Each step stores its own results, such as topology files (`.top`), molecular structures (`.gro`), GROMACS run input files (`.tpr`) and trajectories (`.xtc`).
 
 To see the results of an example test run with a full size dataset refer to the [results](https://nf-co.re/moleculardynamics/results) tab on the nf-core website pipeline page.
 For more details about the output files and reports, please refer to the
 [output documentation](https://nf-co.re/moleculardynamics/output).
 
-## Credits
+# Credits
 
-nf-core/moleculardynamics was originally written by Sara Tolosa Alarcón.
+nf-core/moleculardynamics has been developed by Sara Tolosa Alarcón ([@sarata00](https://github.com/sarata00)) from the [Computational Biology Group](https://www.bsc.es/discover-bsc/organisation/scientific-structure/computational-biology) at the [Barcelona Supercomputing Center](https://www.bsc.es/) under the [deCYPher project](https://www.decypher.bio/) and supervision of Miguel Romero-Durana ([@migromero](https://github.com/migromero)).
 
-We thank the following people for their extensive assistance in the development of this pipeline:
-
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
-
-## Contributions and Support
+# Contributions and Support
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](docs/CONTRIBUTING.md).
 
 For further information or help, don't hesitate to get in touch on the [Slack `#moleculardynamics` channel](https://nfcore.slack.com/channels/moleculardynamics) (you can join with [this invite](https://nf-co.re/join/slack)).
 
-## Citations
+# Citations
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
 <!-- If you use nf-core/moleculardynamics for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
 
-<!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
+All simulation and analysis steps of this pipeline are run with [GROMACS](https://www.gromacs.org/). If you use nf-core/moleculardynamics, please also cite GROMACS:
+
+> **GROMACS: High performance molecular simulations through multi-level parallelism from laptops to supercomputers.**
+>
+> Mark James Abraham, Teemu Murtola, Roland Schulz, Szilárd Páll, Jeremy C. Smith, Berk Hess & Erik Lindahl.
+>
+> _SoftwareX._ 2015;1-2:19-25. doi: [10.1016/j.softx.2015.06.001](https://doi.org/10.1016/j.softx.2015.06.001).
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
