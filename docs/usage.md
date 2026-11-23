@@ -19,7 +19,7 @@ You will need to create a samplesheet with information about the molecular dynam
 The samplesheet defines molecular systems and their simulation parameters. Each row represents one molecular system to simulate.
 
 ```csv title="samplesheet.csv"
-sample,structure,em_mdp,nvt_mdp,npt_mdp,md_mdp,forcefield,box_type,distance_to_box
+sample,structure,em_mdp,nvt_mdp,npt_mdp,md_mdp,force_field,box_type,distance_to_box
 LYSOZYME,/data/1AKI.pdb,/data/em.mdp,/data/nvt.mdp,/data/npt.mdp,/data/md.mdp,charmm27,cubic,1.0
 UBIQUITIN,/data/1UBQ.pdb,/data/em.mdp,/data/nvt.mdp,/data/npt.mdp,/data/md.mdp,amber99sb,dodecahedron,1.2
 ```
@@ -28,17 +28,17 @@ File paths can be absolute, relative to the directory where you launch the pipel
 
 where:
 
-| Column            | Required | Description                                                                                        |
-| ----------------- | -------- | -------------------------------------------------------------------------------------------------- |
-| `sample`          | Yes      | Sample name (no spaces). Identifies the molecular system for output files.                         |
-| `structure`       | Yes      | PDB structure file in `.pdb` format.                                                               |
-| `em_mdp`          | Yes      | Energy minimization MDP file.                                                                      |
-| `nvt_mdp`         | Yes      | NVT equilibration MDP file.                                                                        |
-| `npt_mdp`         | Yes      | NPT equilibration MDP file.                                                                        |
-| `md_mdp`          | Yes      | Production MDP file.                                                                               |
-| `forcefield`      | Yes      | GROMACS forcefield (`charmm27`, `amber03`, `amber99sb`, `amber99sb-ildn`, `oplsaa`, `gromos54a7`). |
-| `box_type`        | No       | Simulation box geometry (cubic, triclinic, or dodecahedron). Default: cubic.                       |
-| `distance_to_box` | No       | Distance from solute to box edge in nm (0.0–5.0). Default: 1.0.                                    |
+| Column            | Required | Description                                                                                         |
+| ----------------- | -------- | --------------------------------------------------------------------------------------------------- |
+| `sample`          | Yes      | Sample name (no spaces). Identifies the molecular system for output files.                          |
+| `structure`       | Yes      | PDB structure file in `.pdb` format.                                                                |
+| `em_mdp`          | Yes      | Energy minimization MDP file.                                                                       |
+| `nvt_mdp`         | Yes      | NVT equilibration MDP file.                                                                         |
+| `npt_mdp`         | Yes      | NPT equilibration MDP file.                                                                         |
+| `md_mdp`          | Yes      | Production MDP file.                                                                                |
+| `force_field`     | Yes      | GROMACS force field (`charmm27`, `amber03`, `amber99sb`, `amber99sb-ildn`, `oplsaa`, `gromos54a7`). |
+| `box_type`        | No       | Simulation box geometry (cubic, triclinic, or dodecahedron). Default: cubic.                        |
+| `distance_to_box` | No       | Distance from solute to box edge in nm (0.0–5.0). Default: 1.0.                                     |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
@@ -47,7 +47,7 @@ The pipeline currently supports **single-chain (monomeric) proteins in water** o
 - All `HETATM` records (ligands, ions, crystallographic waters and cofactors such as heme) are removed during pre-processing, without a warning.
 - Make sure the PDB file contains a single chain.
 - The structure must have no missing atoms; the pipeline stops if the PDB file reports any. Hydrogens in the input are ignored and rebuilt by `gmx pdb2gmx`.
-- Choose `--water_model` to match your forcefield (e.g. tip3p for CHARMM/AMBER).
+- Choose `--water_model` to match your force field (e.g. tip3p for CHARMM/AMBER).
 
 ## Running the pipeline
 

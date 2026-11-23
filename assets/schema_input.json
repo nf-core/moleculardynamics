@@ -50,7 +50,7 @@
                 "exists": true,
                 "errorMessage": "Production MD MDP file must be provided and must exist"
             },
-            "forcefield": {
+            "force_field": {
                 "type": "string",
                 "description": "GROMACS force field name",
                 "enum": ["charmm27", "amber03", "amber99sb", "amber99sb-ildn", "oplsaa", "gromos54a7"],
@@ -71,6 +71,6 @@
                 "default": 1.0
             }
         },
-        "required": ["sample", "structure", "em_mdp", "nvt_mdp", "npt_mdp", "md_mdp", "forcefield"]
+        "required": ["sample", "structure", "em_mdp", "nvt_mdp", "npt_mdp", "md_mdp", "force_field"]
     }
 }

@@ -1,2 +1,2 @@
-sample,structure,em_mdp,nvt_mdp,npt_mdp,md_mdp,forcefield,box_type,distance_to_box
+sample,structure,em_mdp,nvt_mdp,npt_mdp,md_mdp,force_field,box_type,distance_to_box
 CYP_WT,/path/to/structure.pdb,/path/to/em.mdp,/path/to/nvt.mdp,/path/to/npt.mdp,/path/to/md.mdp,charmm27,cubic,1.0
