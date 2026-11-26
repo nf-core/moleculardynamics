@@ -19,12 +19,13 @@ Initial release of nf-core/moleculardynamics, created with the [nf-core](https:/
 - Template update to nf-core/tools 4.2.1: the pipeline now works with the latest Nextflow (26.x). Software versions are collated from the `versions` topic by the template's own code, so the local patch to `utils_nfcore_pipeline` is no longer needed and has been removed. `nextflow.preview.topic` and the help/summary banners in `nextflow.config` are gone.
 - Results are now published per sample (`<outdir>/<sample>/<step>/`), so samples no longer overwrite each other's outputs.
 - Input MDP files are no longer copied into every output folder.
+- Samplesheet column `forcefield` renamed to `force_field`.
 
 ### `Fixed`
 
 - RMSD is now computed against the starting structure (production `.tpr`, frame 0) instead of the last frame, using C-alpha atoms for both fit and RMSD.
 - `publishDir` paths are closures, as required by Nextflow >= 25.10 (a plain string failed with `No such variable: sample`).
-- Samplesheet `forcefield` values are restricted to force fields included with GROMACS 2022 (`charmm36`, `amber14sb` and `amber` were accepted but failed at `pdb2gmx`).
+- Samplesheet `force_field` values are restricted to force fields included with GROMACS 2022 (`charmm36`, `amber14sb` and `amber` were accepted but failed at `pdb2gmx`).
 - `manifest.defaultBranch` set to `main`.
 - nf-test: corrected test-data base path and software versions file name.
 - Lint: regenerated logos and LICENSE still referring to the old `mdsimulations` name, and removed an empty local subworkflow that crashed lint.

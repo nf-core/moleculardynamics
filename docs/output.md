@@ -63,7 +63,7 @@ The input PDB is reduced to the protein, then checked for missing atoms, which w
 
 - `<sample>/topology/`
   - `<sample>.gro`: processed protein coordinates in GROMACS format.
-  - `topol.top`: system topology for the chosen force field (`forcefield` column) and water model (`--water_model`).
+  - `topol.top`: system topology for the chosen force field (`force_field` column) and water model (`--water_model`).
   - `posre*.itp`: position restraint file(s) for heavy atoms, used during equilibration (`define = -DPOSRES`). Proteins with several chains get one `.itp` file per chain.
 
 </details>
