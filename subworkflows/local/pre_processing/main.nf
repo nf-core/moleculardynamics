@@ -1,16 +1,16 @@
 #!/usr/bin/env nextflow
 
-include { PRE_POS_CLEAN_PDB }         from '../../../modules/local/pre_pos_clean_pdb.nf'
-include { PRE_POS_CHECK_MISSING_ATOMS } from '../../../modules/local/pre_pos_check_missing_atoms.nf'
+include { PDB_CLEAN }        from '../../../modules/local/pdb/clean/main'
+include { PDB_CHECKMISSING } from '../../../modules/local/pdb/checkmissing/main'
 
 workflow PRE_PROCESSING {
     take:
     ch_inputs
 
     main:
-    PRE_POS_CLEAN_PDB(ch_inputs)
-    PRE_POS_CHECK_MISSING_ATOMS(PRE_POS_CLEAN_PDB.out.cleaned)
+    PDB_CLEAN(ch_inputs)
+    PDB_CHECKMISSING(PDB_CLEAN.out.cleaned)
 
     emit:
-    cleaned_pdb = PRE_POS_CHECK_MISSING_ATOMS.out.checked_pdb
+    cleaned_pdb = PDB_CHECKMISSING.out.checked_pdb
 }

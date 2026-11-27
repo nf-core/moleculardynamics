@@ -8,7 +8,7 @@
 // ----------------------------------------------------------------------------------------
 //
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//    CLEAN_PDB Process
+//    PDB_CLEAN Process
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //     Description:
 //     - Reads a PDB file from the given path.
@@ -17,7 +17,7 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-process PRE_POS_CLEAN_PDB {
+process PDB_CLEAN {
     label 'process_single'
 
     publishDir path: { "${params.outdir}/${sample}/preprocessing" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }

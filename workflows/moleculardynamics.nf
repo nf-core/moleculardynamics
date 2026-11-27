@@ -35,7 +35,7 @@ workflow MOLECULARDYNAMICS {
 
     ch_inputs = ch_samplesheet.map { meta, structure, em_mdp, nvt_mdp, npt_mdp, md_mdp, forcefield, box_type, distance_to_box ->
         def sample = meta.id
-        // Reorder to match PRE_POS_CLEAN_PDB input declaration
+        // Reorder to match PDB_CLEAN input declaration
         tuple(sample, structure, forcefield, box_type, distance_to_box, em_mdp, nvt_mdp, npt_mdp, md_mdp)
     }
     ch_inputs.view { "📦 Parsed sample inputs: $it" }
