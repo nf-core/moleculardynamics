@@ -17,17 +17,18 @@
 */
 
 process RUN_PRODUCTION {
+    tag "$meta.id"
     label 'process_high'
     label 'process_long'
 
-    publishDir path: { "${params.outdir}/${sample}/production" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
+    publishDir path: { "${params.outdir}/${meta.id}/production" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
 
     input:
-    tuple val(sample), path(npt_gro), path(topol), path(itps), path(md_mdp)
+    tuple val(meta), path(npt_gro), path(topol), path(itps), path(md_mdp)
 
 
     output:
-    tuple val(sample),
+    tuple val(meta),
         path("${md_mdp.simpleName}.tpr"),
         path("${md_mdp.simpleName}.gro"),
         path("${md_mdp.simpleName}.xtc"),

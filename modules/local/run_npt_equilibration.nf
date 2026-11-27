@@ -16,16 +16,17 @@
 */
 
 process RUN_NPT_EQUILIBRATION {
+    tag "$meta.id"
     label 'process_medium'
 
-    publishDir path: { "${params.outdir}/${sample}/npt_equilibration" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
+    publishDir path: { "${params.outdir}/${meta.id}/npt_equilibration" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
 
     input:
-    tuple val(sample), path(nvt_gro), path(topol), path(itps), path(npt_mdp), path(md_mdp)
+    tuple val(meta), path(nvt_gro), path(topol), path(itps), path(npt_mdp), path(md_mdp)
 
 
     output:
-    tuple val(sample),
+    tuple val(meta),
         path("${npt_mdp.simpleName}.gro"),
         path("topol.top"),
         path(itps),

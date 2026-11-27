@@ -33,10 +33,10 @@ workflow MOLECULARDYNAMICS {
     // STEP 0. Unpack samplesheet into a well-defined tuple channel
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-    ch_inputs = ch_samplesheet.map { meta, structure, em_mdp, nvt_mdp, npt_mdp, md_mdp, forcefield, box_type, distance_to_box ->
-        def sample = meta.id
+    // meta = [id, box_type, distance_to_box], as declared in assets/schema_input.json
+    ch_inputs = ch_samplesheet.map { meta, structure, em_mdp, nvt_mdp, npt_mdp, md_mdp, force_field ->
         // Reorder to match PDB_CLEAN input declaration
-        tuple(sample, structure, forcefield, box_type, distance_to_box, em_mdp, nvt_mdp, npt_mdp, md_mdp)
+        tuple(meta, structure, force_field, em_mdp, nvt_mdp, npt_mdp, md_mdp)
     }
     ch_inputs.view { "📦 Parsed sample inputs: $it" }
 
@@ -52,22 +52,22 @@ workflow MOLECULARDYNAMICS {
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     RUN_MD_SIMULATION(PRE_PROCESSING.out.cleaned_pdb)
     RUN_MD_SIMULATION.out.md_report.view { "✅ Production run completed!" }
-    ch_md_tpr = RUN_MD_SIMULATION.out.md_tpr    // tuple(sample, tpr)
-    ch_md_gro = RUN_MD_SIMULATION.out.md_gro    // tuple(sample, gro)
-    ch_md_xtc = RUN_MD_SIMULATION.out.md_xtc    // tuple(sample, xtc)
+    ch_md_tpr = RUN_MD_SIMULATION.out.md_tpr    // tuple(meta, tpr)
+    ch_md_gro = RUN_MD_SIMULATION.out.md_gro    // tuple(meta, gro)
+    ch_md_xtc = RUN_MD_SIMULATION.out.md_xtc    // tuple(meta, xtc)
 
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     // STEP 8. Post-processing: Remove periodicity, fit to reference, etc.
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    ch_post_input = ch_md_tpr.join(ch_md_xtc)   // tuple(sample, tpr, xtc)
+    ch_post_input = ch_md_tpr.join(ch_md_xtc)   // tuple(meta, tpr, xtc)
     POST_PROCESSING(ch_post_input)
-    ch_postprocessed_xtc = POST_PROCESSING.out.post_xtc   // tuple(sample, noPBC.xtc)
+    ch_postprocessed_xtc = POST_PROCESSING.out.post_xtc   // tuple(meta, noPBC.xtc)
 
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     // STEP 9. Analysis: RMSD calculation
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     // Reference is the production .tpr (starting structure), not the final .gro
-    ch_rmsd_input = ch_md_tpr.join(ch_postprocessed_xtc)   // tuple(sample, tpr, noPBC.xtc)
+    ch_rmsd_input = ch_md_tpr.join(ch_postprocessed_xtc)   // tuple(meta, tpr, noPBC.xtc)
     ANALYSIS_RMSD(ch_rmsd_input)
     ANALYSIS_RMSD.out.rmsd_xvg.view { "✅ RMSD analysis completed: $it" }
 
@@ -104,8 +104,8 @@ workflow MOLECULARDYNAMICS {
 
     emit:
     versions           = ch_collated_versions        // channel: [ path(versions.yml) ]
-    postprocessed_xtc  = ch_postprocessed_xtc        // channel: [ tuple(sample_id, path(postprocessed_xtc)) ]
-    rmsd               = ANALYSIS_RMSD.out.rmsd_xvg  // channel: [ tuple(sample_id, path(rmsd.xvg)) ]
+    postprocessed_xtc  = ch_postprocessed_xtc        // channel: [ tuple(meta, path(postprocessed_xtc)) ]
+    rmsd               = ANALYSIS_RMSD.out.rmsd_xvg  // channel: [ tuple(meta, path(rmsd.xvg)) ]
 }
 
 /*

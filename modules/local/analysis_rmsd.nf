@@ -18,15 +18,16 @@
 */
 
 process ANALYSIS_RMSD {
+    tag "$meta.id"
     label 'process_low'
 
-    publishDir path: { "${params.outdir}/${sample}/analysis" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
+    publishDir path: { "${params.outdir}/${meta.id}/analysis" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
 
     input:
-    tuple val(sample), path(md_tpr), path(md_noPBC_xtc)
+    tuple val(meta), path(md_tpr), path(md_noPBC_xtc)
 
     output:
-    tuple val(sample), path("rmsd.xvg"), emit: rmsd_xvg
+    tuple val(meta), path("rmsd.xvg"), emit: rmsd_xvg
     tuple val("${task.process}"),
         val('gromacs'),
         eval("${params.gmx_cmd} --version 2>/dev/null | sed -n 's/^GROMACS version:[[:space:]]*//p' | head -n 1 || true"),

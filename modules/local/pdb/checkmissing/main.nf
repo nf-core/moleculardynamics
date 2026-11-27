@@ -18,18 +18,19 @@
 */
 
 process PDB_CHECKMISSING {
+    tag "$meta.id"
     label 'process_single'
 
-    publishDir path: { "${params.outdir}/${sample}/preprocessing" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
+    publishDir path: { "${params.outdir}/${meta.id}/preprocessing" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
 
 
         input:
-        tuple val(sample), path(cleaned_pdb), val(forcefield), val(box_type), val(distance_to_box), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
+        tuple val(meta), path(cleaned_pdb), val(force_field), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
 
         output:
-        tuple val(sample),
-              path("${sample}_checked.pdb"),
-              val(forcefield), val(box_type), val(distance_to_box),
+        tuple val(meta),
+              path("${meta.id}_checked.pdb"),
+              val(force_field),
               path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp),
               emit: checked_pdb
           tuple val("${task.process}"),
@@ -45,7 +46,7 @@ process PDB_CHECKMISSING {
             grep 'MISSING' "$cleaned_pdb" >&2
             exit 1
         else
-            cp "$cleaned_pdb" "${sample}_checked.pdb"
+            cp "$cleaned_pdb" "${meta.id}_checked.pdb"
             echo "No missing atoms found in $cleaned_pdb"
         fi
 

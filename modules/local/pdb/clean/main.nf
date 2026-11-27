@@ -18,15 +18,16 @@
 */
 
 process PDB_CLEAN {
+    tag "$meta.id"
     label 'process_single'
 
-    publishDir path: { "${params.outdir}/${sample}/preprocessing" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
+    publishDir path: { "${params.outdir}/${meta.id}/preprocessing" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
 
     input:
-    tuple val(sample), path(pdb), val(forcefield), val(box_type), val(distance_to_box), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
+    tuple val(meta), path(pdb), val(force_field), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
 
     output:
-    tuple val(sample), path("${sample}_cleaned.pdb"), val(forcefield), val(box_type), val(distance_to_box),
+    tuple val(meta), path("${meta.id}_cleaned.pdb"), val(force_field),
         path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp),
         emit: cleaned
     tuple val("${task.process}"),
@@ -37,8 +38,8 @@ process PDB_CLEAN {
 
     script:
     """
-    grep -v HETATM "$pdb" > "${sample}_temp.pdb"
-    grep -v CONECT "${sample}_temp.pdb" > "${sample}_cleaned.pdb"
+    grep -v HETATM "$pdb" > "${meta.id}_temp.pdb"
+    grep -v CONECT "${meta.id}_temp.pdb" > "${meta.id}_cleaned.pdb"
 
     """
 

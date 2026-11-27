@@ -16,15 +16,16 @@
 */
 
 process RUN_ENERGY_MINIMISATION {
+    tag "$meta.id"
     label 'process_medium'
 
-    publishDir path: { "${params.outdir}/${sample}/energy_minimization" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
+    publishDir path: { "${params.outdir}/${meta.id}/energy_minimization" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
 
     input:
-    tuple val(sample), path(gro_box_solvated_ions), path(topol), path(itps), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
+    tuple val(meta), path(gro_box_solvated_ions), path(topol), path(itps), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
 
     output:
-    tuple val(sample),
+    tuple val(meta),
         path("${em_mdp.simpleName}.gro"),
         path("topol.top"),
         path(itps),

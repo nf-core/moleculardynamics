@@ -33,7 +33,7 @@ workflow RUN_MD_SIMULATION {
     RUN_PRODUCTION(RUN_NPT_EQUILIBRATION.out.npt_equilibration_out)
 
     emit:
-    // production_out is tuple(sample, tpr, gro, xtc)
+    // production_out is tuple(meta, tpr, gro, xtc)
     md_tpr    = RUN_PRODUCTION.out.production_out.map { tuple(it[0], it[1]) }
     md_gro    = RUN_PRODUCTION.out.production_out.map { tuple(it[0], it[2]) }
     md_xtc    = RUN_PRODUCTION.out.production_out.map { tuple(it[0], it[3]) }

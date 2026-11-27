@@ -17,15 +17,16 @@
 */
 
 process POST_PROCESSING {
+    tag "$meta.id"
     label 'process_low'
 
-    publishDir path: { "${params.outdir}/${sample}/post_processing" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
+    publishDir path: { "${params.outdir}/${meta.id}/post_processing" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
 
     input:
-    tuple val(sample), path(md_tpr), path(md_xtc)
+    tuple val(meta), path(md_tpr), path(md_xtc)
 
     output:
-    tuple val(sample), path("md_noPBC.xtc"), emit: post_xtc
+    tuple val(meta), path("md_noPBC.xtc"), emit: post_xtc
     tuple val("${task.process}"),
         val('gromacs'),
         eval("${params.gmx_cmd} --version 2>/dev/null | sed -n 's/^GROMACS version:[[:space:]]*//p' | head -n 1 || true"),

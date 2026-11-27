@@ -18,20 +18,20 @@
 
 
 process RUN_TOPOLOGY {
+    tag "$meta.id"
     label 'process_medium'
 
-    publishDir path: { "${params.outdir}/${sample}/topology" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
+    publishDir path: { "${params.outdir}/${meta.id}/topology" }, mode: 'copy', saveAs: { filename -> filename.endsWith('.mdp') ? null : filename }
 
     input:
-    tuple val(sample), path(checked_pdb), val(forcefield), val(box_type), val(distance_to_box), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
+    tuple val(meta), path(checked_pdb), val(force_field), path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp)
 
     output:
-    tuple val(sample),
-        path("${sample}.gro"),
+    tuple val(meta),
+        path("${meta.id}.gro"),
         path("topol.top"),
         path("*.itp"),
         path(em_mdp), path(nvt_mdp), path(npt_mdp), path(md_mdp),
-        val(forcefield), val(box_type), val(distance_to_box),
         emit: topology_out
     tuple val("${task.process}"),
         val('gromacs'),
@@ -42,7 +42,7 @@ process RUN_TOPOLOGY {
     script:
     """
     echo "Loading data from ${checked_pdb} and generating GROMACS topology file (.gro)"
-    ${params.gmx_cmd} pdb2gmx -f ${checked_pdb} -o ${sample}.gro -i posre.itp -ff ${forcefield} -water ${params.water_model} -ignh
+    ${params.gmx_cmd} pdb2gmx -f ${checked_pdb} -o ${meta.id}.gro -i posre.itp -ff ${force_field} -water ${params.water_model} -ignh
 
     """
 }
