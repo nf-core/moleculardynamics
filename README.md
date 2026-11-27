@@ -44,11 +44,11 @@ The `nf-core/moleculardynamics` pipeline automates a standard GROMACS MD simulat
 - **Input pre-processing:** Remove heteroatoms (ligands, ions, waters) from the PDB structure and check that no atoms are missing.
 - **MD simulation:** Main subworkflow of the pipeline.
   - **Generation of molecular topology**,
-  - **System solvation**, and ion addition to neutralize the system.
-  - **Energy Minimization:** Removal of steric clashes and relaxation of the initial structure.
+  - **System solvation**, and ion addition to neutralise the system.
+  - **Energy Minimisation:** Removal of steric clashes and relaxation of the initial structure.
   - **Equilibration:** NVT (constant Number, Volume, Temperature) and NPT (constant Number, Pressure, Temperature) equilibration to bring the system to the desired temperature and density.
   - **Production MD:** Execution of the main molecular dynamics simulation.
-- **Post-processing:** Centre the protein and remove periodic boundary condition (PBC) artifacts from the trajectory.
+- **Post-processing:** Centre the protein and remove periodic boundary condition (PBC) artefacts from the trajectory.
 - **Analysis:** Calculation of the Root-Mean-Square Deviation (RMSD) relative to the starting structure.
 
 # Usage

@@ -1,0 +1,99 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
+name: "gromacs_mdrun"
+description: Run a simulation or energy minimisation
+keywords:
+  - molecular dynamics
+  - simulation
+  - energy minimisation
+  - energy minimization
+tools:
+  - "gromacs":
+      description: "Molecular dynamics simulation package"
+      homepage: "https://www.gromacs.org"
+      documentation: "https://manual.gromacs.org"
+      tool_dev_url: "https://gitlab.com/gromacs/gromacs"
+      doi: "10.1016/j.softx.2015.06.001"
+      licence: ["LGPL-2.1-or-later"]
+      identifier: biotools:gromacs
+      args_id: "$args"
+
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
+    - tpr:
+        type: file
+        description: Portable binary run input
+        pattern: "*.tpr"
+
+output:
+  gro:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "${prefix}.gro":
+          type: file
+          description: GROMACS structure
+          pattern: "*.gro"
+  edr:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "${prefix}.edr":
+          type: file
+          description: Energies
+          pattern: "*.edr"
+  log:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "${prefix}.log":
+          type: file
+          description: Run log
+          pattern: "*.log"
+  xtc:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "${prefix}.xtc":
+          type: file
+          description: Compressed trajectory
+          pattern: "*.xtc"
+  versions_gromacs:
+    - - "${task.process}":
+          type: string
+          description: The name of the process
+      - "gromacs":
+          type: string
+          description: The name of the tool
+      - "${task.ext.gmx_cmd ?: 'gmx'} --version 2>/dev/null | sed -n 's/^GROMACS version:[[:space:]]*//p' | head -n 1 || true":
+          type: eval
+          description: The expression to obtain the version of the tool
+
+topics:
+  versions:
+    - - "${task.process}":
+          type: string
+          description: The name of the process
+      - "gromacs":
+          type: string
+          description: The name of the tool
+      - "${task.ext.gmx_cmd ?: 'gmx'} --version 2>/dev/null | sed -n 's/^GROMACS version:[[:space:]]*//p' | head -n 1 || true":
+          type: eval
+          description: The expression to obtain the version of the tool
+
+authors:
+  - "@sarata00"
+maintainers:
+  - "@sarata00"

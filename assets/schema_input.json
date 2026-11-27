@@ -24,10 +24,10 @@
             },
             "em_mdp": {
                 "type": "string",
-                "description": "Path to the energy minimization MDP file",
+                "description": "Path to the energy minimisation MDP file",
                 "format": "file-path",
                 "exists": true,
-                "errorMessage": "Energy minimization MDP file must be provided and must exist"
+                "errorMessage": "Energy minimisation MDP file must be provided and must exist"
             },
             "nvt_mdp": {
                 "type": "string",
@@ -57,12 +57,14 @@
                 "errorMessage": "Force field must be one of the following: charmm27, amber03, amber99sb, amber99sb-ildn, oplsaa, gromos54a7"
             },
             "box_type": {
+                "meta": ["box_type"],
                 "type": "string",
                 "description": "Type of the simulation box",
                 "enum": ["cubic", "triclinic", "dodecahedron"],
                 "default": "cubic"
             },
             "distance_to_box": {
+                "meta": ["distance_to_box"],
                 "type": "number",
                 "description": "Distance from the solute to the edge of the box in nm",
                 "minimum": 0.0,

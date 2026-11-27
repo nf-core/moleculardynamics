@@ -1,0 +1,69 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
+name: "pdb_clean"
+description: Remove HETATM and CONECT records from a PDB file
+keywords:
+  - pdb
+  - cleaning
+  - structure
+  - preprocessing
+tools:
+  - "grep":
+      description: "Search files for lines matching a pattern"
+      homepage: "https://www.gnu.org/software/grep/"
+      documentation: "https://www.gnu.org/software/grep/manual/grep.html"
+      tool_dev_url: "https://git.savannah.gnu.org/cgit/grep.git"
+      doi: ""
+      licence: ["GPL-3.0-or-later"]
+      identifier: ""
+      args_id: "$args"
+
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
+    - pdb:
+        type: file
+        description: Protein structure
+        pattern: "*.pdb"
+
+output:
+  pdb:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "${prefix}.pdb":
+          type: file
+          description: Protein structure
+          pattern: "*.pdb"
+  versions_grep:
+    - - "${task.process}":
+          type: string
+          description: The name of the process
+      - "grep":
+          type: string
+          description: The name of the tool
+      - "grep --version | sed -n '1s/.* //p'":
+          type: eval
+          description: The expression to obtain the version of the tool
+
+topics:
+  versions:
+    - - "${task.process}":
+          type: string
+          description: The name of the process
+      - "grep":
+          type: string
+          description: The name of the tool
+      - "grep --version | sed -n '1s/.* //p'":
+          type: eval
+          description: The expression to obtain the version of the tool
+
+authors:
+  - "@sarata00"
+maintainers:
+  - "@sarata00"

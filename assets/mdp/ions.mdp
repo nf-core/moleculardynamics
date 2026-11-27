@@ -1,0 +1,1 @@
+; Intentionally empty: gmx grompp only needs a parameter file to build the run input for gmx genion.

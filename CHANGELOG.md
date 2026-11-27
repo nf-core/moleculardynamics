@@ -10,7 +10,7 @@ Initial release of nf-core/moleculardynamics, created with the [nf-core](https:/
 ### `Added`
 
 - `test` (2 ps production, ~1.5 min on 4 CPUs) and `test_full` (1 ns) profiles using the lysozyme (PDB 1AKI) dataset from nf-core/test-datasets#1949.
-- `gmx_cmd`, `water_model`, `water_coordinates`, `ion_concentration`, `gromacs_container` and `gromacs_conda` documented and validated in `nextflow_schema.json`.
+- `gmx_cmd`, `water_model`, `water_coordinates` and `ion_concentration` documented and validated in `nextflow_schema.json`.
 - Output documentation (`docs/output.md`), updated usage documentation (`docs/usage.md`) and GROMACS citation in `README.md` and `CITATIONS.md`.
 - nf-test snapshot and explicit checks for the pipeline test (per-sample output folders, no published MDP files, 11 RMSD frames starting at 0), with the non-reproducible GROMACS outputs excluded in `tests/.nftignore`.
 
@@ -20,6 +20,11 @@ Initial release of nf-core/moleculardynamics, created with the [nf-core](https:/
 - Results are now published per sample (`<outdir>/<sample>/<step>/`), so samples no longer overwrite each other's outputs.
 - Input MDP files are no longer copied into every output folder.
 - Samplesheet column `forcefield` renamed to `force_field`.
+- Local modules follow the nf-core module structure: one command per module in `modules/local/<tool>/<subtool>/`, with meta maps, `ext.args`, stubs and `meta.yml`.
+- New subworkflows `gromacs_solvation` and `gromacs_grompp_mdrun` chain the single-command modules.
+- Each module declares its own container and conda environment. The params `gromacs_container` and `gromacs_conda` are removed; use `withName` in a custom config to change them.
+- The PDB pre-processing modules run in a small image with GNU `grep` instead of the GROMACS image.
+- `topol.top` and `posre*.itp` are published only by the steps that create or change them (`topology/` and `solvation/topol.top`).
 
 ### `Fixed`
 
@@ -27,6 +32,7 @@ Initial release of nf-core/moleculardynamics, created with the [nf-core](https:/
 - `publishDir` paths are closures, as required by Nextflow >= 25.10 (a plain string failed with `No such variable: sample`).
 - Samplesheet `force_field` values are restricted to force fields included with GROMACS 2022 (`charmm36`, `amber14sb` and `amber` were accepted but failed at `pdb2gmx`).
 - `manifest.defaultBranch` set to `main`.
+- The GROMACS conda environment uses `conda-forge::gromacs==2022`
 - nf-test: corrected test-data base path and software versions file name.
 - Lint: regenerated logos and LICENSE still referring to the old `mdsimulations` name, and removed an empty local subworkflow that crashed lint.
 

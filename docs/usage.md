@@ -32,7 +32,7 @@ where:
 | ----------------- | -------- | --------------------------------------------------------------------------------------------------- |
 | `sample`          | Yes      | Sample name (no spaces). Identifies the molecular system for output files.                          |
 | `structure`       | Yes      | PDB structure file in `.pdb` format.                                                                |
-| `em_mdp`          | Yes      | Energy minimization MDP file.                                                                       |
+| `em_mdp`          | Yes      | Energy minimisation MDP file.                                                                       |
 | `nvt_mdp`         | Yes      | NVT equilibration MDP file.                                                                         |
 | `npt_mdp`         | Yes      | NPT equilibration MDP file.                                                                         |
 | `md_mdp`          | Yes      | Production MDP file.                                                                                |
@@ -181,6 +181,18 @@ To change the resource requests, please see the [max resources](https://nf-co.re
 In some cases, you may wish to change the container or conda environment used by a pipeline steps for a particular tool. By default, nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However, in some cases the pipeline specified version maybe out of date.
 
 To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#update-tool-versions) section of the nf-core website.
+
+In this pipeline, each module declares its own container and conda environment. For example, to run all the GROMACS steps with another image, add this to a custom config and pass it with `-c`:
+
+```groovy
+process {
+    withName: 'GROMACS_.*' {
+        container = '<your GROMACS image>'
+    }
+}
+```
+
+If the GROMACS executable in that image is not called `gmx`, set `--gmx_cmd`.
 
 ### Custom Tool Arguments
 
