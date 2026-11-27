@@ -20,48 +20,48 @@ tools:
 
 input:
   - - meta:
-            type: map
-            description: |
-              Groovy Map containing sample information
-              e.g. `[ id:'sample1' ]`
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
     - pdb:
-          type: file
-          description: Protein structure
-          pattern: "*.pdb"
+        type: file
+        description: Protein structure
+        pattern: "*.pdb"
     - force_field:
-          type: string
-          description: Force field name
-  - water_model:
         type: string
-        description: Water model
+        description: Force field name
+  - water_model:
+      type: string
+      description: Water model
 
 output:
   gro:
     - - meta:
-              type: map
-              description: |
-                Groovy Map containing sample information
-                e.g. `[ id:'sample1' ]`
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
       - "${prefix}.gro":
           type: file
           description: GROMACS structure
           pattern: "*.gro"
   top:
     - - meta:
-              type: map
-              description: |
-                Groovy Map containing sample information
-                e.g. `[ id:'sample1' ]`
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
       - "topol.top":
           type: file
           description: System topology
           pattern: "*.top"
   itp:
     - - meta:
-              type: map
-              description: |
-                Groovy Map containing sample information
-                e.g. `[ id:'sample1' ]`
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
       - "*.itp":
           type: file
           description: Include topology files, for example position restraints

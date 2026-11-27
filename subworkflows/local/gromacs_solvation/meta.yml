@@ -1,0 +1,40 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: "gromacs_solvation"
+description: Define the simulation box, add the solvent and add ions
+keywords:
+  - molecular dynamics
+  - solvation
+  - ions
+components:
+  - gromacs/editconf
+  - gromacs/solvate
+  - gromacs/grompp
+  - gromacs/genion
+input:
+  - ch_gro:
+      description: |
+        Protein structure. Structure: [ val(meta), path(file) ]
+  - ch_top:
+      description: |
+        System topology. Structure: [ val(meta), path(file) ]
+  - ch_itp:
+      description: |
+        Include topology files. Structure: [ val(meta), path(file) ]
+  - ch_mdp:
+      description: |
+        Parameters used to prepare the ion placement. Structure: [ val(meta), path(file) ]
+  - val_solvent_group:
+      description: |
+        String: group whose molecules are replaced by ions
+output:
+  - gro:
+      description: |
+        Solvated structure with ions. Structure: [ val(meta), path(file) ]
+  - top:
+      description: |
+        Updated topology. Structure: [ val(meta), path(file) ]
+authors:
+  - "@sarata00"
+maintainers:
+  - "@sarata00"

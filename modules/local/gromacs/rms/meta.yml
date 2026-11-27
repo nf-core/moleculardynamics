@@ -19,32 +19,32 @@ tools:
 
 input:
   - - meta:
-            type: map
-            description: |
-              Groovy Map containing sample information
-              e.g. `[ id:'sample1' ]`
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
     - tpr:
-          type: file
-          description: Portable binary run input
-          pattern: "*.tpr"
+        type: file
+        description: Portable binary run input
+        pattern: "*.tpr"
     - xtc:
-          type: file
-          description: Compressed trajectory
-          pattern: "*.xtc"
+        type: file
+        description: Compressed trajectory
+        pattern: "*.xtc"
   - fit_group:
-        type: string
-        description: Index group used for the least squares fit
+      type: string
+      description: Index group used for the least squares fit
   - rmsd_group:
-        type: string
-        description: Index group used for the RMSD
+      type: string
+      description: Index group used for the RMSD
 
 output:
   xvg:
     - - meta:
-              type: map
-              description: |
-                Groovy Map containing sample information
-                e.g. `[ id:'sample1' ]`
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
       - "${prefix}.xvg":
           type: file
           description: RMSD over time

@@ -20,52 +20,52 @@ tools:
 
 input:
   - - meta:
-            type: map
-            description: |
-              Groovy Map containing sample information
-              e.g. `[ id:'sample1' ]`
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
     - tpr:
-          type: file
-          description: Portable binary run input
-          pattern: "*.tpr"
+        type: file
+        description: Portable binary run input
+        pattern: "*.tpr"
 
 output:
   gro:
     - - meta:
-              type: map
-              description: |
-                Groovy Map containing sample information
-                e.g. `[ id:'sample1' ]`
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
       - "${prefix}.gro":
           type: file
           description: GROMACS structure
           pattern: "*.gro"
   edr:
     - - meta:
-              type: map
-              description: |
-                Groovy Map containing sample information
-                e.g. `[ id:'sample1' ]`
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
       - "${prefix}.edr":
           type: file
           description: Energies
           pattern: "*.edr"
   log:
     - - meta:
-              type: map
-              description: |
-                Groovy Map containing sample information
-                e.g. `[ id:'sample1' ]`
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
       - "${prefix}.log":
           type: file
           description: Run log
           pattern: "*.log"
   xtc:
     - - meta:
-              type: map
-              description: |
-                Groovy Map containing sample information
-                e.g. `[ id:'sample1' ]`
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
       - "${prefix}.xtc":
           type: file
           description: Compressed trajectory

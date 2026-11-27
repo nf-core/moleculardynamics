@@ -19,38 +19,38 @@ tools:
 
 input:
   - - meta:
-            type: map
-            description: |
-              Groovy Map containing sample information
-              e.g. `[ id:'sample1' ]`
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
     - mdp:
-          type: file
-          description: Simulation parameters
-          pattern: "*.mdp"
+        type: file
+        description: Simulation parameters
+        pattern: "*.mdp"
     - gro:
-          type: file
-          description: GROMACS structure
-          pattern: "*.gro"
+        type: file
+        description: GROMACS structure
+        pattern: "*.gro"
     - top:
-          type: file
-          description: System topology
-          pattern: "*.top"
+        type: file
+        description: System topology
+        pattern: "*.top"
     - itp:
-          type: file
-          description: Include topology files, for example position restraints
-          pattern: "*.itp"
+        type: file
+        description: Include topology files, for example position restraints
+        pattern: "*.itp"
     - restraint_gro:
-          type: file
-          description: Optional reference structure for position restraints
-          pattern: "*.gro"
+        type: file
+        description: Optional reference structure for position restraints
+        pattern: "*.gro"
 
 output:
   tpr:
     - - meta:
-              type: map
-              description: |
-                Groovy Map containing sample information
-                e.g. `[ id:'sample1' ]`
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
       - "${prefix}.tpr":
           type: file
           description: Portable binary run input

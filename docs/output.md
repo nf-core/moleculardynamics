@@ -42,6 +42,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and runs a stan
 
 - `<sample>` in directory and file names is the value of the `sample` column of the samplesheet.
 - Files produced by `gmx grompp` and `gmx mdrun` (`.tpr`, `.gro`, `.edr`, `.log`, `.xtc`) are named after the MDP file used for that step. For example, if the samplesheet column `em_mdp` points to `em.mdp`, the energy minimisation outputs are `em.tpr`, `em.gro`, `em.edr` and `em.log`. In the sections below, `<em>`, `<nvt>`, `<npt>` and `<md>` stand for the base names of the `em_mdp`, `nvt_mdp`, `npt_mdp` and `md_mdp` files.
+- Topology files are published only by the steps that create or change them. The simulation steps, from energy minimisation to production, use `<sample>/solvation/topol.top` and `<sample>/topology/posre*.itp`.
 
 ### Pre-processing
 
@@ -81,7 +82,6 @@ The input PDB is reduced to the protein, then checked for missing atoms, which w
   - `<sample>_box_solv_ions.gro`: solvated system after adding ions. This is the starting structure for energy minimisation.
   - `ions.tpr`: run input file used by `gmx genion` to place the ions.
   - `topol.top`: topology updated with the number of water molecules and ions.
-  - `posre*.itp`: position restraint file(s).
 
 </details>
 
@@ -99,7 +99,6 @@ The input PDB is reduced to the protein, then checked for missing atoms, which w
   - `<em>.tpr`: run input file.
   - `<em>.edr`: energy file, e.g. for plotting the potential energy with `gmx energy`.
   - `<em>.log`: GROMACS log with the final potential energy and maximum force.
-  - `topol.top`, `posre*.itp`: topology files used by this step.
 
 </details>
 
@@ -115,7 +114,6 @@ Energy minimisation removes steric clashes before dynamics starts. To check whet
   - `<nvt>.tpr`: run input file.
   - `<nvt>.edr`: energy file, e.g. for checking that the temperature converged with `gmx energy`.
   - `<nvt>.log`: GROMACS log.
-  - `topol.top`, `posre*.itp`: topology files used by this step.
 
 </details>
 
@@ -131,7 +129,6 @@ The system is heated to the target temperature at constant volume, with the prot
   - `<npt>.tpr`: run input file.
   - `<npt>.edr`: energy file, e.g. for checking pressure and density with `gmx energy`.
   - `<npt>.log`: GROMACS log.
-  - `topol.top`, `posre*.itp`: topology files used by this step.
 
 </details>
 

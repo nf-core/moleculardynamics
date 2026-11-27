@@ -24,10 +24,10 @@
             },
             "em_mdp": {
                 "type": "string",
-                "description": "Path to the energy minimization MDP file",
+                "description": "Path to the energy minimisation MDP file",
                 "format": "file-path",
                 "exists": true,
-                "errorMessage": "Energy minimization MDP file must be provided and must exist"
+                "errorMessage": "Energy minimisation MDP file must be provided and must exist"
             },
             "nvt_mdp": {
                 "type": "string",

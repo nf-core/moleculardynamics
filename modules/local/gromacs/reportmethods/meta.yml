@@ -19,22 +19,22 @@ tools:
 
 input:
   - - meta:
-            type: map
-            description: |
-              Groovy Map containing sample information
-              e.g. `[ id:'sample1' ]`
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
     - tpr:
-          type: file
-          description: Portable binary run input
-          pattern: "*.tpr"
+        type: file
+        description: Portable binary run input
+        pattern: "*.tpr"
 
 output:
   out:
     - - meta:
-              type: map
-              description: |
-                Groovy Map containing sample information
-                e.g. `[ id:'sample1' ]`
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
       - "${prefix}.out":
           type: file
           description: Methods report

@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: "pre_processing"
+description: Remove heteroatoms from a PDB structure and check it for missing atoms
+keywords:
+  - pdb
+  - preprocessing
+  - structure
+components:
+  - pdb/clean
+  - pdb/checkmissing
+input:
+  - ch_pdb:
+      description: |
+        Input protein structure. Structure: [ val(meta), path(file) ]
+output:
+  - pdb:
+      description: |
+        Cleaned and checked structure. Structure: [ val(meta), path(file) ]
+authors:
+  - "@sarata00"
+maintainers:
+  - "@sarata00"

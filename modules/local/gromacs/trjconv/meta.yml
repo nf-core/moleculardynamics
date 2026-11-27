@@ -19,32 +19,32 @@ tools:
 
 input:
   - - meta:
-            type: map
-            description: |
-              Groovy Map containing sample information
-              e.g. `[ id:'sample1' ]`
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
     - tpr:
-          type: file
-          description: Portable binary run input
-          pattern: "*.tpr"
+        type: file
+        description: Portable binary run input
+        pattern: "*.tpr"
     - xtc:
-          type: file
-          description: Compressed trajectory
-          pattern: "*.xtc"
+        type: file
+        description: Compressed trajectory
+        pattern: "*.xtc"
   - center_group:
-        type: string
-        description: Index group used for centring
+      type: string
+      description: Index group used for centring
   - output_group:
-        type: string
-        description: Index group written to the output
+      type: string
+      description: Index group written to the output
 
 output:
   xtc:
     - - meta:
-              type: map
-              description: |
-                Groovy Map containing sample information
-                e.g. `[ id:'sample1' ]`
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
       - "${prefix}.xtc":
           type: file
           description: Compressed trajectory

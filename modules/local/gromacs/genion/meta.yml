@@ -19,39 +19,39 @@ tools:
 
 input:
   - - meta:
-            type: map
-            description: |
-              Groovy Map containing sample information
-              e.g. `[ id:'sample1' ]`
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
     - tpr:
-          type: file
-          description: Portable binary run input
-          pattern: "*.tpr"
+        type: file
+        description: Portable binary run input
+        pattern: "*.tpr"
     - top:
-          type: file
-          description: System topology
-          pattern: "*.top"
+        type: file
+        description: System topology
+        pattern: "*.top"
   - solvent_group:
-        type: string
-        description: Name of the group whose molecules are replaced by ions
+      type: string
+      description: Name of the group whose molecules are replaced by ions
 
 output:
   gro:
     - - meta:
-              type: map
-              description: |
-                Groovy Map containing sample information
-                e.g. `[ id:'sample1' ]`
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
       - "${prefix}.gro":
           type: file
           description: GROMACS structure
           pattern: "*.gro"
   top:
     - - meta:
-              type: map
-              description: |
-                Groovy Map containing sample information
-                e.g. `[ id:'sample1' ]`
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
       - "topol.top":
           type: file
           description: System topology

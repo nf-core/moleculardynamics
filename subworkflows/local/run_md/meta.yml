@@ -1,0 +1,58 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: "run_md_simulation"
+description: Run the standard GROMACS protocol from topology generation to production
+keywords:
+  - molecular dynamics
+  - gromacs
+  - simulation
+components:
+  - gromacs/pdb2gmx
+  - gromacs_solvation
+  - gromacs_grompp_mdrun
+  - gromacs/reportmethods
+input:
+  - ch_pdb:
+      description: |
+        Cleaned protein structure. Structure: [ val(meta), path(file) ]
+  - ch_force_field:
+      description: |
+        Force field name. Structure: [ val(meta), val(force_field) ]
+  - ch_ions_mdp:
+      description: |
+        Parameters used to prepare the ion placement. Structure: [ val(meta), path(file) ]
+  - ch_em_mdp:
+      description: |
+        Energy minimisation parameters. Structure: [ val(meta), path(file) ]
+  - ch_nvt_mdp:
+      description: |
+        NVT equilibration parameters. Structure: [ val(meta), path(file) ]
+  - ch_npt_mdp:
+      description: |
+        NPT equilibration parameters. Structure: [ val(meta), path(file) ]
+  - ch_md_mdp:
+      description: |
+        Production parameters. Structure: [ val(meta), path(file) ]
+  - val_water_model:
+      description: |
+        String: water model used to build the topology
+  - val_solvent_group:
+      description: |
+        String: group whose molecules are replaced by ions
+output:
+  - tpr:
+      description: |
+        Production run input file. Structure: [ val(meta), path(file) ]
+  - gro:
+      description: |
+        Final production structure. Structure: [ val(meta), path(file) ]
+  - xtc:
+      description: |
+        Production trajectory. Structure: [ val(meta), path(file) ]
+  - report:
+      description: |
+        Methods report. Structure: [ val(meta), path(file) ]
+authors:
+  - "@sarata00"
+maintainers:
+  - "@sarata00"
