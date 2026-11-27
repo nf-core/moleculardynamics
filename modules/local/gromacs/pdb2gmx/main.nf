@@ -1,6 +1,10 @@
 process GROMACS_PDB2GMX {
     tag "$meta.id"
     label 'process_medium'
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'https://depot.galaxyproject.org/singularity/gromacs:2022'
+        : 'quay.io/biocontainers/gromacs:2022'}"
 
     input:
     tuple val(meta), path(pdb), val(force_field)

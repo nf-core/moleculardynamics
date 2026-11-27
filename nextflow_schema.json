@@ -72,20 +72,6 @@
                     "minimum": 0,
                     "description": "Salt concentration (mol/L) passed to `gmx genion -conc`. The system is always neutralised with NA/CL ions.",
                     "fa_icon": "fas fa-flask"
-                },
-                "gromacs_container": {
-                    "type": "string",
-                    "default": "quay.io/biocontainers/gromacs:2022",
-                    "description": "Container image used for all GROMACS processes.",
-                    "hidden": true,
-                    "fa_icon": "fab fa-docker"
-                },
-                "gromacs_conda": {
-                    "type": "string",
-                    "default": "bioconda::gromacs=2022",
-                    "description": "Conda package used for all GROMACS processes with `-profile conda` or `-profile mamba`.",
-                    "hidden": true,
-                    "fa_icon": "fas fa-box"
                 }
             }
         },

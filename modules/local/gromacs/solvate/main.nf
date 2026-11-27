@@ -1,6 +1,10 @@
 process GROMACS_SOLVATE {
     tag "$meta.id"
     label 'process_low'
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'https://depot.galaxyproject.org/singularity/gromacs:2022'
+        : 'quay.io/biocontainers/gromacs:2022'}"
 
     input:
     tuple val(meta), path(gro), path(top)
