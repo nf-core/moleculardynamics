@@ -1,16 +1,14 @@
-#!/usr/bin/env nextflow
-
-include { PDB_CLEAN }        from '../../../modules/local/pdb/clean/main'
+include { PDB_CLEAN        } from '../../../modules/local/pdb/clean/main'
 include { PDB_CHECKMISSING } from '../../../modules/local/pdb/checkmissing/main'
 
 workflow PRE_PROCESSING {
     take:
-    ch_inputs
+    ch_pdb // channel: [ val(meta), path(pdb) ]
 
     main:
-    PDB_CLEAN(ch_inputs)
-    PDB_CHECKMISSING(PDB_CLEAN.out.cleaned)
+    PDB_CLEAN(ch_pdb)
+    PDB_CHECKMISSING(PDB_CLEAN.out.pdb)
 
     emit:
-    cleaned_pdb = PDB_CHECKMISSING.out.checked_pdb
+    pdb = PDB_CHECKMISSING.out.pdb // channel: [ val(meta), path(pdb) ]
 }

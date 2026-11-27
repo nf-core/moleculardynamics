@@ -7,10 +7,10 @@ include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_moleculardynamics_pipeline'
 
-include { PRE_PROCESSING        } from '../subworkflows/local/pre_processing/main.nf'
-include { RUN_MD_SIMULATION     } from '../subworkflows/local/run_md/main.nf'
-include { POST_PROCESSING       } from '../modules/local/post_processing.nf'
-include { ANALYSIS_RMSD         } from '../modules/local/analysis_rmsd.nf'
+include { PRE_PROCESSING         } from '../subworkflows/local/pre_processing/main'
+include { RUN_MD_SIMULATION      } from '../subworkflows/local/run_md/main'
+include { GROMACS_TRJCONV        } from '../modules/local/gromacs/trjconv/main'
+include { GROMACS_RMS            } from '../modules/local/gromacs/rms/main'
 
 
 /*
@@ -30,46 +30,60 @@ workflow MOLECULARDYNAMICS {
     log.info "📝 Pipeline parameters:\n${paramsSummaryMap(workflow)}"
 
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    // STEP 0. Unpack samplesheet into a well-defined tuple channel
+    // STEP 0. Split the samplesheet into one channel per input, all keyed by meta
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
     // meta = [id, box_type, distance_to_box], as declared in assets/schema_input.json
-    ch_inputs = ch_samplesheet.map { meta, structure, em_mdp, nvt_mdp, npt_mdp, md_mdp, force_field ->
-        // Reorder to match PDB_CLEAN input declaration
-        tuple(meta, structure, force_field, em_mdp, nvt_mdp, npt_mdp, md_mdp)
-    }
-    ch_inputs.view { "📦 Parsed sample inputs: $it" }
+    // Parameters file for the ion placement, shipped with the pipeline
+    def ions_mdp = file("${projectDir}/assets/mdp/ions.mdp", checkIfExists: true)
 
-
-    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    // STEP 1. Pre-processing: Clean PDB file
-    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    PRE_PROCESSING(ch_inputs)
-    PRE_PROCESSING.out.cleaned_pdb.view { "✅ Cleaned PDB ready: $it" }
-
-    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    // STEP 2-7. Run MD simulation: Energy minimization, equilibration, production run, post-processing
-    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    RUN_MD_SIMULATION(PRE_PROCESSING.out.cleaned_pdb)
-    RUN_MD_SIMULATION.out.md_report.view { "✅ Production run completed!" }
-    ch_md_tpr = RUN_MD_SIMULATION.out.md_tpr    // tuple(meta, tpr)
-    ch_md_gro = RUN_MD_SIMULATION.out.md_gro    // tuple(meta, gro)
-    ch_md_xtc = RUN_MD_SIMULATION.out.md_xtc    // tuple(meta, xtc)
+    ch_samplesheet
+        .multiMap { meta, structure, em_mdp, nvt_mdp, npt_mdp, md_mdp, force_field ->
+            structure: [meta, structure]
+            force_field: [meta, force_field]
+            ions_mdp: [meta, ions_mdp]
+            em_mdp: [meta, em_mdp]
+            nvt_mdp: [meta, nvt_mdp]
+            npt_mdp: [meta, npt_mdp]
+            md_mdp: [meta, md_mdp]
+        }
+        .set { ch_inputs }
+    ch_inputs.structure.view { sample -> "📦 Parsed sample inputs: ${sample}" }
 
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    // STEP 8. Post-processing: Remove periodicity, fit to reference, etc.
+    // STEP 1. Pre-processing: clean and check the PDB file
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    ch_post_input = ch_md_tpr.join(ch_md_xtc)   // tuple(meta, tpr, xtc)
-    POST_PROCESSING(ch_post_input)
-    ch_postprocessed_xtc = POST_PROCESSING.out.post_xtc   // tuple(meta, noPBC.xtc)
+    PRE_PROCESSING(ch_inputs.structure)
+    PRE_PROCESSING.out.pdb.view { sample -> "✅ Cleaned PDB ready: ${sample}" }
 
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    // STEP 9. Analysis: RMSD calculation
+    // STEP 2. Run MD simulation: topology, solvation, energy minimisation, equilibration and production
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    RUN_MD_SIMULATION(
+        PRE_PROCESSING.out.pdb,
+        ch_inputs.force_field,
+        ch_inputs.ions_mdp,
+        ch_inputs.em_mdp,
+        ch_inputs.nvt_mdp,
+        ch_inputs.npt_mdp,
+        ch_inputs.md_mdp,
+        params.water_model,
+        'SOL',
+    )
+    RUN_MD_SIMULATION.out.report.view { "✅ Production run completed!" }
+
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // STEP 3. Post-processing: remove periodicity artefacts, centring the protein (group 1) and writing the system (group 0)
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    ch_trjconv = RUN_MD_SIMULATION.out.tpr.join(RUN_MD_SIMULATION.out.xtc, failOnMismatch: true, failOnDuplicate: true)
+    GROMACS_TRJCONV(ch_trjconv, '1', '0')
+
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // STEP 4. Analysis: RMSD, with the least squares fit and the RMSD both computed on C-alpha (group 3)
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     // Reference is the production .tpr (starting structure), not the final .gro
-    ch_rmsd_input = ch_md_tpr.join(ch_postprocessed_xtc)   // tuple(meta, tpr, noPBC.xtc)
-    ANALYSIS_RMSD(ch_rmsd_input)
-    ANALYSIS_RMSD.out.rmsd_xvg.view { "✅ RMSD analysis completed: $it" }
+    ch_rms = RUN_MD_SIMULATION.out.tpr.join(GROMACS_TRJCONV.out.xtc, failOnMismatch: true, failOnDuplicate: true)
+    GROMACS_RMS(ch_rms, '3', '3')
+    GROMACS_RMS.out.xvg.view { sample -> "✅ RMSD analysis completed: ${sample}" }
 
     def ch_versions = channel.empty()
 
@@ -104,8 +118,8 @@ workflow MOLECULARDYNAMICS {
 
     emit:
     versions           = ch_collated_versions        // channel: [ path(versions.yml) ]
-    postprocessed_xtc  = ch_postprocessed_xtc        // channel: [ tuple(meta, path(postprocessed_xtc)) ]
-    rmsd               = ANALYSIS_RMSD.out.rmsd_xvg  // channel: [ tuple(meta, path(rmsd.xvg)) ]
+    postprocessed_xtc  = GROMACS_TRJCONV.out.xtc     // channel: [ tuple(meta, path(postprocessed_xtc)) ]
+    rmsd               = GROMACS_RMS.out.xvg         // channel: [ tuple(meta, path(rmsd.xvg)) ]
 }
 
 /*
